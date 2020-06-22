@@ -9,3 +9,31 @@ body {
   display: flex;
   flex-wrap: wrap;
 }
+button {
+  color: white;
+  padding: 5px 10px;
+  margin: 5px 20px;
+  outline: none;
+  border: none;
+  font-size: 12px;
+  letter-spacing: 1;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: background-color 0.4s;
+  &:active {
+    background-color: tomato;
+    padding: 7px 10px 3px 10px;
+  }
+}
+.main {
+  background-color: royalblue;
+  &:hover {
+    background-color: blue;
+  }
+}
+.secondary {
+  background-color: slategray;
+  &:hover {
+    background-color: slateblue;
+  }
+}

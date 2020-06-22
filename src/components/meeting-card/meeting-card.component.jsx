@@ -1,39 +1,18 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
+
+import { setMeetingCards } from "../../redux/redux-meetings/meeting-actions";
 import "./meeting-card.scss";
 import MeetingDescription from "../meeting-descr/meeting-descr.component";
+import CommentsList from "../comments-list/comments.list.component";
+import TabHeader from "./card-content-tab";
+import EalutionBlock from "../evaluations-list/evaluations-list.component";
 
-function MeetingCard({ data }) {
-  const [activeTab, setActiveTab] = useState(0);
-  const handleTab = (num) => setActiveTab(num);
+// ******************
 
-  const tabHeader = (activeTab) => (
-    <div
-      style={{
-        display: "flex",
-        width: "100%",
-        justifyContent: "space-around",
-      }}
-    >
-      <div
-        className={activeTab === 0 ? "active-tab" : "inactive-tab"}
-        onClick={() => handleTab(0)}
-      >
-        Description
-      </div>
-      <div
-        className={activeTab === 1 ? "active-tab" : "inactive-tab"}
-        onClick={() => handleTab(1)}
-      >
-        Comments
-      </div>
-      <div
-        className={activeTab === 2 ? "active-tab" : "inactive-tab"}
-        onClick={() => handleTab(2)}
-      >
-        Evaluations
-      </div>
-    </div>
-  );
+function MeetingCard({ data, id, setMeetingCards, meetingCards }) {
+  const activeTab = meetingCards[id];
+
   const tabContent = (tab) => {
     switch (tab) {
       default:
@@ -41,18 +20,25 @@ function MeetingCard({ data }) {
       case 0:
         return <MeetingDescription data={data} />;
       case 1:
-        return <div>customElements</div>;
+        return <CommentsList meeting_id={id} />;
       case 2:
-        return <div>evaluations</div>;
+        return <EalutionBlock meeting_id={id} />;
     }
   };
   return (
     <div className="card">
       <h3 className="title">{data.title}</h3>
-      {tabHeader(activeTab)}
+      <TabHeader tab={activeTab} setMeetingCards={setMeetingCards} id={id} />
       {tabContent(activeTab)}
     </div>
   );
 }
-
-export default MeetingCard;
+const mapStateToProps = (state) => ({
+  meetingCards: state.meetings.meetingCards,
+});
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setMeetingCards: (obj) => dispatch(setMeetingCards(obj)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(MeetingCard);

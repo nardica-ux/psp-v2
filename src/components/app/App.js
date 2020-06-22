@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { getBase } from "../../firebase/firebase.utils";
 import { connect } from "react-redux";
+
 import "./App.scss";
 import AppHeader from "../app-header/app-header";
 import MeetingCard from "../meeting-card/meeting-card.component";
@@ -9,6 +10,7 @@ import {
   fetchAllMeetings,
   clearMeetingsRedux,
 } from "../../redux/redux-meetings/meeting-actions";
+import { setCommentsRedux } from "../../redux/comments/comments-actions";
 
 class App extends Component {
   constructor(props) {
@@ -20,29 +22,41 @@ class App extends Component {
   }
 
   async componentDidMount() {
+    console.log("*** called component DID MOUNT");
     if (!this.props.meetings) {
       let meetings = await getBase("meetings");
+      let comments = await getBase("meeting_comments");
       if (meetings) {
-        console.log("fetching called");
+        console.log("*** fetching in DID MOUNT");
         this.props.fetchAllMeetings(meetings);
+        this.props.setCommentsRedux(comments);
       }
     }
   }
-
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    console.log("*** called get SnapShot before udate");
+    return true;
+  }
   async shouldComponentUpdate(nextProps, nextState) {
-    console.log(nextProps);
+    console.log("*** called componentSHOULD update");
     if (nextProps.meetings.meetings === null) {
       let meetings = await getBase("meetings");
+      let comments = await getBase("meeting_comments");
       if (meetings) {
-        console.log("fetching called UPDATE");
+        console.log("*** fetching  shouldUPDATE");
         this.props.fetchAllMeetings(meetings);
+        this.props.setCommentsRedux(comments);
       }
       return true;
-    } else return false;
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log("*** called component_DID update", snapshot);
   }
 
   render() {
-    const { meetings, meetIds } = this.props.meetings;
+    const { meetings, meetIds, meetingCards } = this.props.meetings;
     const { clearMeetingsRedux } = this.props;
 
     return (
@@ -52,7 +66,6 @@ class App extends Component {
           <button
             onClick={() => {
               clearMeetingsRedux();
-              // setUpdate();
             }}
           >
             Clear Meetings Redux
@@ -61,7 +74,13 @@ class App extends Component {
         <div className="main-box">
           {meetings
             ? meetings.map((el, i) => (
-                <MeetingCard key={meetIds[i]} id={meetIds[i]} data={el} />
+                <MeetingCard
+                  key={meetIds[i]}
+                  num={i}
+                  id={meetIds[i]}
+                  tab={meetingCards[i]}
+                  data={el}
+                />
               ))
             : null}
         </div>
@@ -76,6 +95,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchAllMeetings: (arr) => dispatch(fetchAllMeetings(arr)),
     clearMeetingsRedux: () => dispatch(clearMeetingsRedux()),
+    setCommentsRedux: (arr) => dispatch(setCommentsRedux(arr)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(App);
