@@ -1,14 +1,14 @@
+import { commentsActionTypes } from "./comments-actions";
 const INITIAL_STATE = {
   commentsData: {},
+  isFetching: false,
 };
 
 const commentsReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case "SET_COMMENTS_REDUX": {
-      let data = action.payload;
+    case commentsActionTypes.FETCH_COMMENTS_SUCCESS: {
+      let arr = action.payload;
       let commentsData = {};
-      let arr = data.map((el) => Object.values(el)[0]);
-      console.log("*** called SET_COMMENTS_REDUX");
       arr.map((el) => (commentsData[el.meeting_id] = []));
       arr.map((el) => commentsData[el.meeting_id].push(el));
       return {

@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 
 import { setMeetingCards } from "../../redux/redux-meetings/meeting-actions";
 import "./meeting-card.scss";
-import { setEvaluationTab } from "../../redux/evaluations/evaluation-actions";
 import MeetingDescription from "./meeting-descr.component";
 import CommentsList from "../comments-list/comments.list.component";
 import TabHeader from "./card-content-tab";
@@ -11,17 +10,15 @@ import EvalutionBlock from "../evaluations-list/evaluations-list.component";
 
 // ******************
 
-function MeetingCard({
-  data,
-  id,
-  setEvaluationTab,
-  setMeetingCards,
-  meetingCards,
-}) {
-  const activeTab = meetingCards[id];
-  useEffect(() => {
-    setEvaluationTab({ meeting_id: id, num: 0 });
-  }, [id]);
+function MeetingCard({ data, id, setMeetingCards, meetingCards }) {
+  const [activeTab, setActiveTab] = useState(meetingCards[id]);
+  const handleTab = (num) => {
+    setActiveTab(num);
+    setMeetingCards({ id, num });
+  };
+  // useEffect(() => {
+  //   setEvaluationTab({ meeting_id: id, num: 0 });
+  // }, [id]);
 
   const tabContent = (tab) => {
     switch (tab) {
@@ -38,7 +35,7 @@ function MeetingCard({
   return (
     <div className="card">
       <h3 className="title">{data.title}</h3>
-      <TabHeader tab={activeTab} setMeetingCards={setMeetingCards} id={id} />
+      <TabHeader tab={activeTab} handleTab={handleTab} id={id} />
       {tabContent(activeTab)}
     </div>
   );
@@ -49,7 +46,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     setMeetingCards: (obj) => dispatch(setMeetingCards(obj)),
-    setEvaluationTab: (id) => dispatch(setEvaluationTab(id)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(MeetingCard);

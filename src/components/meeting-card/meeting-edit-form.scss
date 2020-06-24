@@ -1,0 +1,21 @@
+.meeting-edit {
+  overflow: hidden;
+  resize: none;
+  font-family: Verdana;
+  border: 1px solid rgb(197, 190, 240);
+  padding: 8px;
+  border-radius: 8px;
+  margin: 0;
+  margin-right: 10px;
+  min-width: 100px;
+  width: 20%;
+  &.long {
+    min-width: 90%;
+  }
+  &:focus {
+    border: 1px solid rgb(147, 131, 255);
+    outline: none;
+    background: whitesmoke;
+    color: slateblue;
+  }
+}

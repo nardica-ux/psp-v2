@@ -7,10 +7,10 @@ import AppHeader from "../app-header/app-header";
 import MeetingCard from "../meeting-card/meeting-card.component";
 
 import {
-  fetchAllMeetings,
   clearMeetingsRedux,
+  fetchMeetingsStart,
 } from "../../redux/redux-meetings/meeting-actions";
-import { setCommentsRedux } from "../../redux/comments/comments-actions";
+import { fetchCommentsStart } from "../../redux/comments/comments-actions";
 import {
   fetch_evaluations_start_async,
   clearEvalsRedux,
@@ -26,42 +26,29 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    const { fetch_evaluations_start_async } = this.props;
+    const {
+      fetch_evaluations_start_async,
+      fetchMeetingsStart,
+      fetchCommentsStart,
+    } = this.props;
     console.log("*** called component DID MOUNT");
-    if (!this.props.meetings) {
-      let meetings = await getBase("meetings");
-      let comments = await getBase("meeting_comments");
-      if (meetings) {
-        console.log("*** fetching in DID MOUNT");
-        this.props.fetchAllMeetings(meetings);
-        this.props.setCommentsRedux(comments);
-        fetch_evaluations_start_async();
-      }
-    }
-  }
-  getSnapshotBeforeUpdate(prevProps, prevState) {
-    console.log("*** called get SnapShot before udate");
-    return true;
-  }
-  async shouldComponentUpdate(nextProps, nextState) {
-    const { fetch_evaluations_start_async } = this.props;
-    console.log("*** called componentSHOULD update");
-    if (nextProps.meetings.meetings === null) {
-      let meetings = await getBase("meetings");
-      let comments = await getBase("meeting_comments");
-      if (meetings) {
-        console.log("*** fetching  shouldUPDATE");
-        this.props.fetchAllMeetings(meetings);
-        this.props.setCommentsRedux(comments);
-        fetch_evaluations_start_async();
-      }
-      return true;
+    if (!this.props.meetings.meetings) {
+      fetchMeetingsStart(); // works with saga
+      fetchCommentsStart(); //works with SAGA
+      fetch_evaluations_start_async(); //works with thunk
     }
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log("*** called component_DID update", snapshot);
-  }
+  // getSnapshotBeforeUpdate(prevProps, prevState) {
+  //   console.log("*** called get SnapShot before udate");
+  // }
+  // async shouldComponentUpdate(nextProps, nextState) {
+  //   if (nextProps === nextState) return false;
+  // }
+
+  // componentDidUpdate(prevProps, prevState, snapshot) {
+  //   console.log("*** called component_DID update", snapshot);
+  // }
 
   render() {
     const { meetings, meetIds, meetingCards } = this.props.meetings;
@@ -95,7 +82,6 @@ class App extends Component {
                   key={meetIds[i]}
                   num={i}
                   id={meetIds[i]}
-                  tab={meetingCards[i]}
                   data={el}
                 />
               ))
@@ -110,9 +96,9 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchAllMeetings: (arr) => dispatch(fetchAllMeetings(arr)),
+    fetchMeetingsStart: () => dispatch(fetchMeetingsStart()),
     clearMeetingsRedux: () => dispatch(clearMeetingsRedux()),
-    setCommentsRedux: (arr) => dispatch(setCommentsRedux(arr)),
+    fetchCommentsStart: () => dispatch(fetchCommentsStart()),
     fetch_evaluations_start_async: () =>
       dispatch(fetch_evaluations_start_async()),
     clearEvalsRedux: () => dispatch(clearEvalsRedux()),

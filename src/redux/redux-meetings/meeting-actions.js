@@ -1,11 +1,28 @@
-export const fetchAllMeetings = (arr) => ({
-  type: "FETCH_ALL_MEETINGS",
+export const meetingsActionTypes = {
+  FETCH_MEETINGS_START: "FETCH_MEETINGS_START",
+  DELETE_MEETINGS_REDUX: "DELETE_MEETINGS_REDUX",
+  SET_MEETINGS_CARDS: "SET_MEETINGS_CARDS",
+  FETCH_MEETINGS_SUCCESS: "FETCH_MEETINGS_SUCCESS",
+  FETCH_MEETINGS_FAILURE: "FETCH_MEETINGS_FAILURE",
+};
+
+export const fetchMeetingsSuccess = (arr) => ({
+  type: meetingsActionTypes.FETCH_MEETINGS_SUCCESS,
   payload: arr,
 });
+
+export const fetchMeetingsFailure = (err) => ({
+  type: meetingsActionTypes.FETCH_MEETINGS_FAILURE,
+  payload: err,
+});
 export const clearMeetingsRedux = () => ({
-  type: "DELETE_MEETINGS_REDUX",
+  type: meetingsActionTypes.DELETE_MEETINGS_REDUX,
 });
 export const setMeetingCards = ({ id, num }) => ({
-  type: "SET_MEETINGS_CARDS",
+  type: meetingsActionTypes.SET_MEETINGS_CARDS,
   payload: { id, num },
+});
+
+export const fetchMeetingsStart = () => ({
+  type: meetingsActionTypes.FETCH_MEETINGS_START,
 });
