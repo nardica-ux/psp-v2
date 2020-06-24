@@ -13,6 +13,11 @@ const config = {
   measurementId: "G-27WTCZXQ3K",
 };
 
+export const API_urls = {
+  main: "https://psp-groupsurvey.firebaseio.com/",
+  evaluations: "https://psp-groupsurvey.firebaseio.com/evaluations",
+};
+
 export const getBase = async (collectionKey) => {
   try {
     let meetingsSnap = await firestore.collection(collectionKey).get();

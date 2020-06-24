@@ -1,17 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
 import { setMeetingCards } from "../../redux/redux-meetings/meeting-actions";
 import "./meeting-card.scss";
-import MeetingDescription from "../meeting-descr/meeting-descr.component";
+import { setEvaluationTab } from "../../redux/evaluations/evaluation-actions";
+import MeetingDescription from "./meeting-descr.component";
 import CommentsList from "../comments-list/comments.list.component";
 import TabHeader from "./card-content-tab";
-import EalutionBlock from "../evaluations-list/evaluations-list.component";
+import EvalutionBlock from "../evaluations-list/evaluations-list.component";
 
 // ******************
 
-function MeetingCard({ data, id, setMeetingCards, meetingCards }) {
+function MeetingCard({
+  data,
+  id,
+  setEvaluationTab,
+  setMeetingCards,
+  meetingCards,
+}) {
   const activeTab = meetingCards[id];
+  useEffect(() => {
+    setEvaluationTab({ meeting_id: id, num: 0 });
+  }, [id]);
 
   const tabContent = (tab) => {
     switch (tab) {
@@ -22,7 +32,7 @@ function MeetingCard({ data, id, setMeetingCards, meetingCards }) {
       case 1:
         return <CommentsList meeting_id={id} />;
       case 2:
-        return <EalutionBlock meeting_id={id} />;
+        return <EvalutionBlock meeting_id={id} />;
     }
   };
   return (
@@ -39,6 +49,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     setMeetingCards: (obj) => dispatch(setMeetingCards(obj)),
+    setEvaluationTab: (id) => dispatch(setEvaluationTab(id)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(MeetingCard);

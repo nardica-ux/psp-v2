@@ -11,6 +11,10 @@ import {
   clearMeetingsRedux,
 } from "../../redux/redux-meetings/meeting-actions";
 import { setCommentsRedux } from "../../redux/comments/comments-actions";
+import {
+  fetch_evaluations_start_async,
+  clearEvalsRedux,
+} from "../../redux/evaluations/evaluation-actions";
 
 class App extends Component {
   constructor(props) {
@@ -22,6 +26,7 @@ class App extends Component {
   }
 
   async componentDidMount() {
+    const { fetch_evaluations_start_async } = this.props;
     console.log("*** called component DID MOUNT");
     if (!this.props.meetings) {
       let meetings = await getBase("meetings");
@@ -30,6 +35,7 @@ class App extends Component {
         console.log("*** fetching in DID MOUNT");
         this.props.fetchAllMeetings(meetings);
         this.props.setCommentsRedux(comments);
+        fetch_evaluations_start_async();
       }
     }
   }
@@ -38,6 +44,7 @@ class App extends Component {
     return true;
   }
   async shouldComponentUpdate(nextProps, nextState) {
+    const { fetch_evaluations_start_async } = this.props;
     console.log("*** called componentSHOULD update");
     if (nextProps.meetings.meetings === null) {
       let meetings = await getBase("meetings");
@@ -46,6 +53,7 @@ class App extends Component {
         console.log("*** fetching  shouldUPDATE");
         this.props.fetchAllMeetings(meetings);
         this.props.setCommentsRedux(comments);
+        fetch_evaluations_start_async();
       }
       return true;
     }
@@ -57,18 +65,27 @@ class App extends Component {
 
   render() {
     const { meetings, meetIds, meetingCards } = this.props.meetings;
-    const { clearMeetingsRedux } = this.props;
+    const { clearMeetingsRedux, clearEvalsRedux } = this.props;
 
     return (
       <div className="App">
         <AppHeader />
         <div>
           <button
+            className="secondary"
             onClick={() => {
               clearMeetingsRedux();
             }}
           >
             Clear Meetings Redux
+          </button>
+          <button
+            className="secondary"
+            onClick={() => {
+              clearEvalsRedux();
+            }}
+          >
+            Clear Eval Redux
           </button>
         </div>
         <div className="main-box">
@@ -96,6 +113,9 @@ const mapDispatchToProps = (dispatch) => {
     fetchAllMeetings: (arr) => dispatch(fetchAllMeetings(arr)),
     clearMeetingsRedux: () => dispatch(clearMeetingsRedux()),
     setCommentsRedux: (arr) => dispatch(setCommentsRedux(arr)),
+    fetch_evaluations_start_async: () =>
+      dispatch(fetch_evaluations_start_async()),
+    clearEvalsRedux: () => dispatch(clearEvalsRedux()),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(App);
