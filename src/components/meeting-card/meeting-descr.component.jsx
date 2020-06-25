@@ -8,11 +8,22 @@ function MeetingDescription({ data }) {
   const editForm = () => (
     <div>
       <span>
-        Author: <input className="meeting-edit" type="text" value={author} />
+        Author:{" "}
+        <input
+          className="meeting-edit"
+          type="text"
+          value={author}
+          onChange={() => {}}
+        />
       </span>
       <span>
         Platform:{" "}
-        <input className="meeting-edit" type="text" value={platform} />
+        <input
+          className="meeting-edit"
+          type="text"
+          value={platform}
+          onChange={() => {}}
+        />
       </span>
       <h3>Goal</h3>
       <textarea
@@ -24,6 +35,7 @@ function MeetingDescription({ data }) {
         wrap="soft"
         // maxlength="200"
         value={goal}
+        onChange={() => {}}
       />
       <h3>Summary</h3>
       <textarea
@@ -34,6 +46,7 @@ function MeetingDescription({ data }) {
         // cols="50"
         wrap="soft"
         // maxlength="200"
+        onChange={() => {}}
       />
       <div style={{ display: "flex" }}>
         <button className="main" onClick={() => setEdit(false)}>

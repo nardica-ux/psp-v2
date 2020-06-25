@@ -27,12 +27,14 @@ button {
 }
 .main {
   background-color: royalblue;
+  margin: 8;
   &:hover {
     background-color: blue;
   }
 }
 .secondary {
   background-color: slategray;
+  margin: 8;
   &:hover {
     background-color: slateblue;
   }

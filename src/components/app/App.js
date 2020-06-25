@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { getBase } from "../../firebase/firebase.utils";
 import { connect } from "react-redux";
 
 import "./App.scss";
@@ -15,6 +14,9 @@ import {
   fetch_evaluations_start_async,
   clearEvalsRedux,
 } from "../../redux/evaluations/evaluation-actions";
+import { clear_redux_user } from "../../redux/users/user-actions";
+
+import SignInGoogle from "../user-sign/user-signin.component";
 
 class App extends Component {
   constructor(props) {
@@ -51,13 +53,17 @@ class App extends Component {
   // }
 
   render() {
-    const { meetings, meetIds, meetingCards } = this.props.meetings;
-    const { clearMeetingsRedux, clearEvalsRedux } = this.props;
+    const { meetings, meetIds } = this.props.meetings;
+    const {
+      clearMeetingsRedux,
+      clearEvalsRedux,
+      clear_redux_user,
+    } = this.props;
 
     return (
       <div className="App">
         <AppHeader />
-        <div>
+        <div style={{ display: "flex", alignContent: "center" }}>
           <button
             className="secondary"
             onClick={() => {
@@ -74,7 +80,12 @@ class App extends Component {
           >
             Clear Eval Redux
           </button>
+          <button className="secondary" onClick={() => clear_redux_user}>
+            Clear users
+          </button>
+          <SignInGoogle />
         </div>
+
         <div className="main-box">
           {meetings
             ? meetings.map((el, i) => (
@@ -102,6 +113,7 @@ const mapDispatchToProps = (dispatch) => {
     fetch_evaluations_start_async: () =>
       dispatch(fetch_evaluations_start_async()),
     clearEvalsRedux: () => dispatch(clearEvalsRedux()),
+    clear_redux_user: () => dispatch(clear_redux_user()),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -26,6 +26,38 @@ export const getBase = async (collectionKey) => {
   }
 };
 
+export const createUserProfile = async (user, additionalData) => {
+  if (!user) return;
+
+  const userRef = firestore.doc(`users/${user.uid}`);
+  const snapShot = await userRef.get();
+
+  if (!snapShot.exists) {
+    const { displayName, email, uid } = user;
+    const createdAt = new Date().toLocaleDateString();
+    try {
+      await userRef.set({
+        id: uid,
+        type: "user",
+        displayName,
+        email,
+        createdAt,
+        ...additionalData,
+      });
+    } catch (err) {
+      console.log("error creating user ", err.message);
+    }
+  }
+  console.log(userRef);
+  return userRef;
+};
+
 firebase.initializeApp(config);
 export const firestore = firebase.firestore();
+export const auth = firebase.auth();
+
+export const googleProvider = new firebase.auth.GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: "select_account" });
+export const signInWithGoogle = () => auth.signInWithPopup(googleProvider);
+
 export default firebase;
