@@ -1,41 +1,68 @@
 export const userActionTypes = {
   GOOGLE_IN_USER_START: "GOOGLE_IN_USER_START",
-  GOOGLE_IN_USER_SUCCESS: "GOOGLE_IN_USER_SUCCESS",
-  GOOGLE_IN_USER_FAILURE: "GOOGLE_IN_USER_FAILURE",
   EMAIL_PASS_USER_START: "EMAIL_PASS_USER_START",
-  EMAIL_PASS_USER_SUCCESS: "EMAIL_PASS_USER_SUCCESS",
-  EMAIL_PASS_USER_FAILURE: "EMAIL_PASS_USER_FAILURE",
-  LOGIN_USER_START: "LOGIN_USER_START",
+
+  LOGIN_USER_SUCCESS: "LOGIN_USER_SUCCESS",
+  LOGIN_USER_FAILURE: "LOGIN_USER_FAILURE",
+
+  LOGOUT_USER_START: "LOGOUT_USER_START",
+  LOGOUT_USER_SUCCESS: "LOGOUT_USER_SUCCESS",
+  LOGOUT_USER_FAILURE: "LOGOUT_USER_FAILURE",
+  CHECK_USER_SESSION: "CHECK_USER_SESSION",
+
+  SIGNUP_USER_START: "SIGNUP_USER_START",
+  SIGNUP_USER_SUCCESS: "SIGNUP_USER_SUCCESS",
+  SIGNUP_USER_FAILURE: "SIGNUP_USER_FAILURE",
 };
 
-// export const login_user_start = () => ({
-//   type: userActionTypes.LOGIN_USER_START,
-// });
+export const signup_user_start = (userCredentials) => ({
+  type: userActionTypes.SIGNUP_USER_START,
+  payload: userCredentials,
+});
+export const signup_user_success = ({ user, additionalData }) => ({
+  type: userActionTypes.SIGNUP_USER_SUCCESS,
+  payload: { user, additionalData },
+});
+export const signup_user_failure = (err) => ({
+  type: userActionTypes.SIGNUP_USER_FAILURE,
+  payload: err,
+});
+
+export const logout_user_start = () => ({
+  type: userActionTypes.LOGOUT_USER_START,
+});
+
+export const logout_user_success = () => ({
+  type: userActionTypes.LOGOUT_USER_SUCCESS,
+});
+
+export const logout_user_failure = (err) => ({
+  type: userActionTypes.LOGOUT_USER_FAILURE,
+  payload: err,
+});
+
+export const check_user_session = () => ({
+  type: userActionTypes.CHECK_USER_SESSION,
+});
 
 export const clear_redux_user = () => ({
   type: "CLEAR_REDUX_USER",
 });
 
+export const email_user_start = (obj) => ({
+  type: userActionTypes.EMAIL_PASS_USER_START,
+  payload: obj,
+});
+
 export const google_in_user_start = () => ({
   type: userActionTypes.GOOGLE_IN_USER_START,
 });
-export const google_in_user_success = (obj) => ({
-  type: userActionTypes.GOOGLE_IN_USER_SUCCESS,
+export const login_user_success = (obj) => ({
+  type: userActionTypes.LOGIN_USER_SUCCESS,
   payload: obj,
-});
-export const google_in_user_failure = (err) => ({
-  type: userActionTypes.GOOGLE_IN_USER_FAILURE,
-  payload: err,
 });
 
-export const email_user_start = () => ({
-  type: userActionTypes.EMAIL_PASS_USER_START,
-});
-export const email_user_success = (obj) => ({
-  type: userActionTypes.EMAIL_PASS_USER_SUCCESS,
-  payload: obj,
-});
-export const email_user_failure = (err) => ({
-  type: userActionTypes.EMAIL_PASS_USER_FAILURE,
+export const login_user_failure = (err) => ({
+  type: userActionTypes.LOGIN_USER_FAILURE,
   payload: err,
 });

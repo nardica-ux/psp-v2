@@ -14,26 +14,23 @@ import {
   fetch_evaluations_start_async,
   clearEvalsRedux,
 } from "../../redux/evaluations/evaluation-actions";
-import { clear_redux_user } from "../../redux/users/user-actions";
-
-import SignInGoogle from "../user-sign/user-signin.component";
+import {
+  clear_redux_user,
+  check_user_session,
+} from "../../redux/users/user-actions";
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      user: null,
-      count: null,
-    };
-  }
+  unsubscribeFromAuth = null;
 
   async componentDidMount() {
     const {
       fetch_evaluations_start_async,
       fetchMeetingsStart,
       fetchCommentsStart,
+      check_user_session,
     } = this.props;
     console.log("*** called component DID MOUNT");
+    check_user_session();
     if (!this.props.meetings.meetings) {
       fetchMeetingsStart(); // works with saga
       fetchCommentsStart(); //works with SAGA
@@ -47,10 +44,12 @@ class App extends Component {
   // async shouldComponentUpdate(nextProps, nextState) {
   //   if (nextProps === nextState) return false;
   // }
-
   // componentDidUpdate(prevProps, prevState, snapshot) {
   //   console.log("*** called component_DID update", snapshot);
   // }
+  componentWillUnmount() {
+    this.unsubscribeFromAuth();
+  }
 
   render() {
     const { meetings, meetIds } = this.props.meetings;
@@ -83,7 +82,6 @@ class App extends Component {
           <button className="secondary" onClick={() => clear_redux_user}>
             Clear users
           </button>
-          <SignInGoogle />
         </div>
 
         <div className="main-box">
@@ -114,6 +112,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetch_evaluations_start_async()),
     clearEvalsRedux: () => dispatch(clearEvalsRedux()),
     clear_redux_user: () => dispatch(clear_redux_user()),
+    check_user_session: () => dispatch(check_user_session()),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(App);

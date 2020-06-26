@@ -1,6 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
+import { putResolve } from "redux-saga/effects";
 
 const config = {
   apiKey: "AIzaSyCftkLfgFs5Dg6iNIzYJ13soSfhoYTQDRs",
@@ -50,6 +51,15 @@ export const createUserProfile = async (user, additionalData) => {
   }
   console.log(userRef);
   return userRef;
+};
+
+export const getCurrentUser = () => {
+  return new Promise((resove, reject) => {
+    const unsubscribe = auth.onAuthStateChanged((userAuth) => {
+      unsubscribe();
+      resove(userAuth);
+    }, reject);
+  });
 };
 
 firebase.initializeApp(config);
