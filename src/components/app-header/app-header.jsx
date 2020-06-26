@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import logo from "./logo.svg";
+import { Link } from "react-router-dom";
 import "./app-header.scss";
 import SignInGoogle from "../user-sign/user-signin.component";
 import UserTopBlock from "../user-components/user-top-block";
@@ -8,7 +9,7 @@ import UserTopBlock from "../user-components/user-top-block";
 const AppHeader = ({ currentUser }) => (
   <header className="App-header">
     <img src={logo} className="App-logo" alt="logo" />
-    <p>PSP v2.0</p>
+    <Link to="/">PSP v2.0</Link>
     {currentUser ? (
       <UserTopBlock currentUser={currentUser} />
     ) : (

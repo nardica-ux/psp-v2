@@ -1,7 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
-import { putResolve } from "redux-saga/effects";
 
 const config = {
   apiKey: "AIzaSyCftkLfgFs5Dg6iNIzYJ13soSfhoYTQDRs",

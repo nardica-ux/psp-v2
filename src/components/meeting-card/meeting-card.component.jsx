@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 import { setMeetingCards } from "../../redux/redux-meetings/meeting-actions";
 import "./meeting-card.scss";
@@ -16,9 +17,6 @@ function MeetingCard({ data, id, setMeetingCards, meetingCards }) {
     setActiveTab(num);
     setMeetingCards({ id, num });
   };
-  // useEffect(() => {
-  //   setEvaluationTab({ meeting_id: id, num: 0 });
-  // }, [id]);
 
   const tabContent = (tab) => {
     switch (tab) {
@@ -34,7 +32,13 @@ function MeetingCard({ data, id, setMeetingCards, meetingCards }) {
   };
   return (
     <div className="card">
-      <h3 className="title">{data.title}</h3>
+      <Link
+        className="title"
+        style={{ color: "slateblue", float: "right" }}
+        to={`meeting/${id}`}
+      >
+        {data.title}
+      </Link>
       <TabHeader tab={activeTab} handleTab={handleTab} id={id} />
       {tabContent(activeTab)}
     </div>

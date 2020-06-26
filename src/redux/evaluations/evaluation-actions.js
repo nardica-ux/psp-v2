@@ -1,7 +1,4 @@
-import {
-  getBase,
-  firestore
-} from "../../firebase/firebase.utils";
+import { getBase, firestore } from "../../firebase/firebase.utils";
 
 export const evalActionTypes = {
   FETCH_EVALUATIONS_START: "FETCH_EVALUATIONS_START",
@@ -84,7 +81,6 @@ export const post_new_eval_async = (obj) => {
 
 export const fetch_evaluations_start_async = () => {
   return (dispatch) => {
-    console.log("async eval called");
     dispatch(fetch_evaluations_start());
     getBase("evaluations")
       .then((res) => dispatch(fetch_evaluations_success(res)))
@@ -98,14 +94,12 @@ export const delete_eval_redux = (obj) => ({
 export const delete_eval_async = ({ id, meeting_id }) => {
   return (dispatch) => {
     console.log(id);
-    let okDelete = false;
     firestore
       .collection("evaluations")
       .doc(id)
       .delete()
       .then((res) => console.log(res))
       .catch((err) => console.log(err.message));
-    // return okDelete
     dispatch(delete_eval_redux({ id, meeting_id }));
   };
 };
