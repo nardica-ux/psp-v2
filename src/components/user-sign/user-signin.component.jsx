@@ -19,13 +19,20 @@ const SignInGoogle = ({
   const [password, setPassword] = useState("");
   const [displayName, setName] = useState("enter your name");
 
-  const handleSubmit = async (e, { email, password }) => {
+  const handleSubmitSignIn = async (e, { email, password, displayName }) => {
     e.preventDefault();
-    email_user_start({ email, password });
+    email_user_start({ email, password, displayName });
+  };
+
+  const handleSubmitSignUp = async (e, { email, password, displayName }) => {
+    e.preventDefault();
+    signup_user_start({ email, password, displayName });
   };
 
   const signINform = () => (
-    <form onSubmit={(e) => handleSubmit(e, { email, password })}>
+    <form
+      onSubmit={(e) => handleSubmitSignIn(e, { email, password, displayName })}
+    >
       <label htmlFor="email">Email</label>
       <input
         className="input-style"
@@ -56,7 +63,9 @@ const SignInGoogle = ({
     </form>
   );
   const signUPform = () => (
-    <form onSubmit={(e) => handleSubmit(e, { email, password })}>
+    <form
+      onSubmit={(e) => handleSubmitSignUp(e, { email, password, displayName })}
+    >
       <input
         style={{ margin: 5, borderRadius: 8 }}
         name="name"

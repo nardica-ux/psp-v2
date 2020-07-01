@@ -12,6 +12,7 @@ const EvaluationForm = ({
   meeting_id,
   evaluationStatus,
   set_posted_success,
+  currentUser,
 }) => {
   const [status, setStatus] = useState(false);
 
@@ -20,16 +21,18 @@ const EvaluationForm = ({
   const [unity, set_unity] = useState(10);
   const [valueTotal, set_value] = useState(10);
   const [review, setReview] = useState("");
+  const user_id = currentUser.id;
+  const user_email = currentUser.email;
 
-  useEffect(() => {
-    console.log("useEffect called");
-    return () => {
-      setTimeout(function() {
-        set_posted_success();
-      }, 2000);
-      setStatus(false);
-    };
-  }, [status]);
+  // useEffect(() => {
+  //   console.log("useEffect called");
+  //   return () => {
+  //     setTimeout(function() {
+  //       set_posted_success();
+  //     }, 2000);
+  //     setStatus(false);
+  //   };
+  // }, [status]);
 
   return status ? (
     <div>
@@ -111,6 +114,8 @@ const EvaluationForm = ({
               intensity,
               meeting_id,
               review,
+              user_id,
+              user_email,
             });
           }}
         >
@@ -122,6 +127,7 @@ const EvaluationForm = ({
 };
 const mapStateToProps = (state) => ({
   evaluationStatus: state.evaluations.isPosting,
+  currentUser: state.users.currentUser,
 });
 
 const mapDispatchToProps = (dispatch) => {

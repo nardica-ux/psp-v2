@@ -51,7 +51,8 @@ export const post_new_eval_async = (obj) => {
     dispatch(post_new_eval_start());
     const {
       meeting_id,
-      user_id = "HJ0ZzqUDNnbMVUhdnbOybbvcKuz1",
+      user_id,
+      user_email,
       intensity,
       difficulty,
       unity,
@@ -65,7 +66,7 @@ export const post_new_eval_async = (obj) => {
       .set({
         evaluation_id: id,
         meeting_id,
-        createdAt: new Date().toLocaleDateString(),
+        createdAt: new Date(),
         intensity,
         difficulty,
         unity,
@@ -73,6 +74,7 @@ export const post_new_eval_async = (obj) => {
         type: "evaluation",
         user_id,
         review,
+        user_email,
       })
       .catch((err) => dispatch(post_new_eval_failure(err)));
     evalRef.get().then((res) => dispatch(post_new_eval_success(res.data())));

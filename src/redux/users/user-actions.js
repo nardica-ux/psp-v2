@@ -13,11 +13,30 @@ export const userActionTypes = {
   SIGNUP_USER_START: "SIGNUP_USER_START",
   SIGNUP_USER_SUCCESS: "SIGNUP_USER_SUCCESS",
   SIGNUP_USER_FAILURE: "SIGNUP_USER_FAILURE",
+
+  EDIT_USER_START: "EDIT_USER_START",
+  EDIT_USER_SUCCESS: "EDIT_USER_SUCCESS",
+  EDIT_USER_FAILURE: "EDIT_USER_FAILURE",
 };
 
-export const signup_user_start = (userCredentials) => ({
+export const edit_user_start = (obj) => ({
+  type: userActionTypes.EDIT_USER_START,
+  payload: obj,
+});
+
+export const edit_user_success = (user) => ({
+  type: userActionTypes.EDIT_USER_SUCCESS,
+  payload: user,
+});
+
+export const edit_user_failure = (err) => ({
+  type: userActionTypes.EDIT_USER_START,
+  payload: err,
+});
+
+export const signup_user_start = (credentials) => ({
   type: userActionTypes.SIGNUP_USER_START,
-  payload: userCredentials,
+  payload: credentials,
 });
 export const signup_user_success = ({ user, additionalData }) => ({
   type: userActionTypes.SIGNUP_USER_SUCCESS,
@@ -28,8 +47,9 @@ export const signup_user_failure = (err) => ({
   payload: err,
 });
 
-export const logout_user_start = () => ({
+export const logout_user_start = (userId) => ({
   type: userActionTypes.LOGOUT_USER_START,
+  payload: userId,
 });
 
 export const logout_user_success = () => ({

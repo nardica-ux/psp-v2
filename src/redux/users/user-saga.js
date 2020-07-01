@@ -4,6 +4,7 @@ import {
   googleProvider,
   createUserProfile,
   getCurrentUser,
+  updateCurrentUser,
 } from "../../firebase/firebase.utils";
 
 import {
@@ -14,7 +15,12 @@ import {
   logout_user_failure,
   signup_user_success,
   signup_user_failure,
+  edit_user_success,
+  edit_user_failure,
+  clear_redux_user,
 } from "../users/user-actions";
+import { clearEvalsRedux } from "../evaluations/evaluation-actions";
+import { clearMeetingsRedux } from "../redux-meetings/meeting-actions";
 
 export function* getSnapShotFromUserAuth(userAuth, additionalData) {
   try {
@@ -71,35 +77,62 @@ export function* onCheckUserSession() {
   yield takeLatest(userActionTypes.CHECK_USER_SESSION, isUserAuthenticated);
 }
 
-export function* logOUtSagaStart() {
+export function* logOUtSagaStart({ payload: { id } }) {
   try {
+    let lastLogged = new Date();
+    let user = { id, lastLogged };
+
+    yield call(updateCurrentUser, user);
     yield auth.signOut();
+    yield call(clear_redux_user);
+    yield call(clearEvalsRedux);
+    yield call(clearMeetingsRedux);
     yield put(logout_user_success());
   } catch (err) {
-    yield put(logout_user_failure());
+    yield put(logout_user_failure(err));
   }
 }
 export function* onUserLogoutStart() {
   yield takeLatest(userActionTypes.LOGOUT_USER_START, logOUtSagaStart);
 }
-
-export function* signUPSagaStart({payload:{email,password, displayName}}){
-  try{
-    const { user } = yield auth.createUserWithEmailAndPassword(email,password)
-    yield put(signup_user_success({user, additionalData: {displayName}}))
-  } catch(err){
-    yield put(signup_user_failure(err))
+export function* signUPSagaStart({
+  payload: { email, password, displayName },
+}) {
+  try {
+    const { user } = yield auth.createUserWithEmailAndPassword(email, password);
+    yield put(
+      signup_user_success({
+        user,
+        additionalData: { displayName },
+      })
+    );
+  } catch (err) {
+    yield put(signup_user_failure(err));
   }
-};
- 
+}
 export function* signInAfterSignUP({ payload: { user, additionalData } }) {
-         yield getSnapShotFromUserAuth(user, additionalData);
-       }
+  yield getSnapShotFromUserAuth(user, additionalData);
+}
 export function* onUserSignUPStart() {
   yield takeLatest(userActionTypes.SIGNUP_USER_START, signUPSagaStart);
 }
 export function* onSignUpSuccess() {
   yield takeLatest(userActionTypes.SIGNUP_USER_SUCCESS, signInAfterSignUP);
+}
+
+export function* editUserSaga({ payload }) {
+  try {
+    yield console.log("userUpdate called", payload.id);
+    const userRef = yield call(updateCurrentUser, payload);
+    const userDoc = yield userRef.get();
+    yield put(edit_user_success(userDoc.data()));
+  } catch {
+    yield put(edit_user_failure());
+  }
+}
+
+export function* onEditUserStart() {
+  yield takeLatest(userActionTypes.EDIT_USER_START, editUserSaga);
 }
 
 export function* userSagas() {
@@ -109,6 +142,7 @@ export function* userSagas() {
     call(onCheckUserSession),
     call(onUserLogoutStart),
     call(onUserSignUPStart),
-    call(onSignUpSuccess)
+    call(onSignUpSuccess),
+    call(onEditUserStart),
   ]);
 }

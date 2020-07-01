@@ -38,7 +38,23 @@ const userReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isLogging: true,
       };
-
+    case userActionTypes.EDIT_USER_START:
+      return {
+        ...state,
+        isLogging: true,
+      };
+    case userActionTypes.EDIT_USER_SUCCESS: {
+      const { displayName, type } = action.payload;
+      return {
+        ...state,
+        isLogging: false,
+        currentUser: {
+          ...state.currentUser,
+          displayName,
+          type,
+        },
+      };
+    }
     case "CLEAR_REDUX_USER":
       return (state = INITIAL_STATE);
   }

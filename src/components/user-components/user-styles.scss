@@ -15,6 +15,7 @@
   display: inline-block;
   display: flex;
   justify-content: center;
+  margin: auto;
   align-items: center;
 }
 .user-eval-line {
@@ -33,4 +34,49 @@
   border-radius: 4px;
   margin: 4px;
   padding: 4px;
+}
+.user-edit-form {
+  input {
+    margin: 8px;
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid slateblue;
+  }
+  textarea {
+    width: 90%;
+    height: 50px;
+    margin: 8px;
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid slateblue;
+  }
+}
+.user-about-box {
+  width: 80%;
+  margin: auto;
+}
+.user-about-top {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1200px;
+  min-width: 400px;
+  width: 100%;
+}
+.user-about {
+  text-align: left;
+  border-radius: 12px;
+  margin: 4px;
+  padding: 8px;
+  background: white;
+  max-width: 1200px;
+  min-width: 80%;
+  margin: 8px auto;
+  // width: 100%;
+}
+fieldset {
+  width: 70%;
+  margin: auto;
+  border-radius: 8px;
+  margin-top: 32px;
+  border: 1px solid slateblue;
 }

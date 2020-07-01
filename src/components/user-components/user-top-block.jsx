@@ -8,23 +8,23 @@ const UserTopBlock = ({
   currentUser: { displayName, id },
   logout_user_start,
 }) => {
-  let name = displayName.split(" ");
-  name.forEach((el) => el.split("")[0]);
-  let initials = name.join("");
+  let initials = [];
+  if (displayName) initials = displayName.split(" ");
+  let thisName = initials.map((el) => el.split("")[0]);
   return (
-    <div style={{ color: "white", marginLeft: "auto" }}>
-      <Link className="ava-user" to={`user/profile`}>
-        {initials}
+    <button style={{ color: "white", marginLeft: "auto" }}>
+      <Link className="ava-user" to={"user/"}>
+        {initials ? thisName.join("") : null}
       </Link>
-      <button className="secondary" onClick={logout_user_start}>
+      <button className="secondary" onClick={() => logout_user_start({ id })}>
         Sign Out
       </button>
-    </div>
+    </button>
   );
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    logout_user_start: () => dispatch(logout_user_start()),
+    logout_user_start: (user) => dispatch(logout_user_start(user)),
   };
 };
 export default connect(null, mapDispatchToProps)(UserTopBlock);

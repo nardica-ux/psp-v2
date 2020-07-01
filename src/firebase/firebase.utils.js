@@ -26,6 +26,21 @@ export const getBase = async (collectionKey) => {
   }
 };
 
+export const updateCurrentUser = async (user) => {
+  const { type, displayName, id, moto, about, lastLogged } = user;
+  try {
+    const userRef = firestore.collection("users").doc(id);
+    if (type) await userRef.update({ type });
+    if (displayName) await userRef.update({ displayName });
+    if (moto) await userRef.update({ moto });
+    if (about) await userRef.update({ about });
+    if (lastLogged) await userRef.update({ lastLogged });
+    return userRef;
+  } catch (err) {
+    return false;
+  }
+};
+
 export const createUserProfile = async (user, additionalData) => {
   if (!user) return;
 
@@ -33,8 +48,9 @@ export const createUserProfile = async (user, additionalData) => {
   const snapShot = await userRef.get();
 
   if (!snapShot.exists) {
-    const { displayName, email, uid } = user;
-    const createdAt = new Date().toLocaleDateString();
+    const { email, uid, displayName } = user;
+    if (displayName === undefined) displayName = additionalData.displayName;
+    const createdAt = new Date().toLocaleTimeString();
     try {
       await userRef.set({
         id: uid,
@@ -48,7 +64,6 @@ export const createUserProfile = async (user, additionalData) => {
       console.log("error creating user ", err.message);
     }
   }
-  console.log(userRef);
   return userRef;
 };
 
