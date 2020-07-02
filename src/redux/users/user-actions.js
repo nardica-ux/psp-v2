@@ -17,7 +17,25 @@ export const userActionTypes = {
   EDIT_USER_START: "EDIT_USER_START",
   EDIT_USER_SUCCESS: "EDIT_USER_SUCCESS",
   EDIT_USER_FAILURE: "EDIT_USER_FAILURE",
+
+  ADMIN_EDIT_USER_START: "ADMIN_EDIT_USER_START",
+  ADMIN_EDIT_USER_SUCCESS: "ADMIN_EDIT_USER_SUCCESS",
+  ADMIN_EDIT_USER_FAILURE: "ADMIN_EDIT_USER_FAILURE",
 };
+
+export const admin_update_user = (user) => ({
+  type: userActionTypes.ADMIN_EDIT_USER_START,
+  payload: user,
+});
+
+export const admin_update_success = () => ({
+  type: userActionTypes.ADMIN_EDIT_USER_SUCCESS,
+});
+
+export const admin_update_failure = (err) => ({
+  type: userActionTypes.ADMIN_EDIT_USER_FAILURE,
+  payload: err,
+});
 
 export const edit_user_start = (obj) => ({
   type: userActionTypes.EDIT_USER_START,

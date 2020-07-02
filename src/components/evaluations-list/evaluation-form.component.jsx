@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import "./evaluation-block.scss";
 
 import {
@@ -7,39 +8,20 @@ import {
   set_posted_success,
 } from "../../redux/evaluations/evaluation-actions";
 
-const EvaluationForm = ({
-  post_new_eval_async,
-  meeting_id,
-  evaluationStatus,
-  set_posted_success,
-  currentUser,
-}) => {
-  const [status, setStatus] = useState(false);
-
+const EvaluationForm = ({ post_new_eval_async, meeting_id, currentUser }) => {
   const [difficulty, set_difficulty] = useState(10);
   const [intensity, set_intensity] = useState(10);
   const [unity, set_unity] = useState(10);
   const [valueTotal, set_value] = useState(10);
   const [review, setReview] = useState("");
-  const user_id = currentUser.id;
-  const user_email = currentUser.email;
+  let user_id;
+  let user_email;
+  if (currentUser) {
+    user_id = currentUser.id;
+    user_email = currentUser.email;
+  }
 
-  // useEffect(() => {
-  //   console.log("useEffect called");
-  //   return () => {
-  //     setTimeout(function() {
-  //       set_posted_success();
-  //     }, 2000);
-  //     setStatus(false);
-  //   };
-  // }, [status]);
-
-  return status ? (
-    <div>
-      ... Being posted, wait ...
-      <button onClick={() => setStatus(false)}>Continue</button>
-    </div>
-  ) : (
+  return currentUser ? (
     <form className="evaluation-form">
       <label htmlFor="difficulty">
         Evaluate the level of difficulty of work
@@ -105,8 +87,7 @@ const EvaluationForm = ({
         <button
           className="main"
           type="button"
-          onClick={() => {
-            setStatus(false);
+          onClick={() =>
             post_new_eval_async({
               unity,
               difficulty,
@@ -116,13 +97,15 @@ const EvaluationForm = ({
               review,
               user_id,
               user_email,
-            });
-          }}
+            })
+          }
         >
           Send
         </button>
       </div>
     </form>
+  ) : (
+    <Redirect to="/" />
   );
 };
 const mapStateToProps = (state) => ({

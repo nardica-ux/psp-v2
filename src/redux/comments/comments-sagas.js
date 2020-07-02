@@ -18,7 +18,6 @@ async function getData(add) {
 }
 
 export function* fetchCommentsAsync() {
-  yield console.log("** SAGA async comments fired");
   try {
     let commentBase = yield firestore.collection("meeting_comments").get();
     let commentData = yield call(getData, commentBase);
@@ -29,6 +28,5 @@ export function* fetchCommentsAsync() {
 }
 
 export function* fetchCommentSagaStart() {
-  console.log("fetch in SAGA comments STARTED");
   yield takeEvery(commentsActionTypes.FETCH_comments_START, fetchCommentsAsync);
 }

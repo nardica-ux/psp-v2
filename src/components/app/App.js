@@ -8,7 +8,7 @@ import ControlREduxButtons from "./control-redux-buttons";
 import MainPage from "../../pages/main-page";
 import MeetingPage from "../../pages/meeting-page";
 import UserPage from "../../pages/user-page";
-import UserEditForm from "../user-components/user-edit-form";
+import UserEditTable from "../admin-tools/user-table";
 
 import { fetchMeetingsStart } from "../../redux/redux-meetings/meeting-actions";
 import { fetchCommentsStart } from "../../redux/comments/comments-actions";
@@ -45,15 +45,15 @@ class App extends Component {
   //   console.log("*** called component_DID update", snapshot);
   // }
   componentWillUnmount() {
-    const {
-      clear_redux_user,
-      clearMeetingsRedux,
-      clearEvalsRedux,
-    } = this.props;
-    clearEvalsRedux();
-    clearMeetingsRedux();
+    // const {
+    //   clear_redux_user,
+    //   clearMeetingsRedux,
+    //   clearEvalsRedux,
+    // } = this.props;
+    // clearEvalsRedux();
+    // clearMeetingsRedux();
     this.unsubscribeFromAuth();
-    clear_redux_user();
+    // clear_redux_user();
   }
 
   render() {
@@ -64,8 +64,8 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={MainPage} />
           <Route path="/meeting/:meeting_id" component={MeetingPage} />
-          <Route path="/user" component={UserPage} />
-          <Route path="/editing" component={UserEditForm} />
+          <Route exact path="/user" component={UserPage} />
+          <Route path="/usertable" component={UserEditTable} />
         </Switch>
       </div>
     );

@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import "./evaluation-block.scss";
 
 function EvaluationHeader({ meeting_id, tab, handleTab }) {
-  console.log(tab);
   return (
     <div className="eval-tab-div">
       <div

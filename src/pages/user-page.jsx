@@ -14,10 +14,7 @@ const UserPage = ({
   meetings,
   commentsData,
 }) => {
-  const [editing, setEdit] = useState(false);
-
   if (!currentUser) return <Redirect to="/" />;
-  if (editing) return <Redirect to="/editing" id={editing} />;
   const { id } = currentUser;
 
   let meetingTitles = meetings.map((el) => el.title);
@@ -35,7 +32,7 @@ const UserPage = ({
     <div
     // onClick={() => props.history.pushState(`${props.match.url}${id}`)}
     >
-      <UserAboutSelf currentUser={currentUser} setEdit={setEdit} />
+      <UserAboutSelf currentUser={currentUser} />
       <UserEvaluations
         meetingTitles={meetingTitles}
         meetIds={meetIds}

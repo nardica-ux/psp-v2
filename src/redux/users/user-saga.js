@@ -18,6 +18,8 @@ import {
   edit_user_success,
   edit_user_failure,
   clear_redux_user,
+  admin_update_success,
+  admin_update_failure,
 } from "../users/user-actions";
 import { clearEvalsRedux } from "../evaluations/evaluation-actions";
 import { clearMeetingsRedux } from "../redux-meetings/meeting-actions";
@@ -122,7 +124,6 @@ export function* onSignUpSuccess() {
 
 export function* editUserSaga({ payload }) {
   try {
-    yield console.log("userUpdate called", payload.id);
     const userRef = yield call(updateCurrentUser, payload);
     const userDoc = yield userRef.get();
     yield put(edit_user_success(userDoc.data()));
@@ -131,8 +132,21 @@ export function* editUserSaga({ payload }) {
   }
 }
 
+export function* adminEditUserSaga({ payload }) {
+  try {
+    yield call(updateCurrentUser, payload);
+    yield put(admin_update_success());
+  } catch {
+    yield put(admin_update_failure());
+  }
+}
+
 export function* onEditUserStart() {
   yield takeLatest(userActionTypes.EDIT_USER_START, editUserSaga);
+}
+
+export function* onAdminEditUser() {
+  yield takeLatest(userActionTypes.ADMIN_EDIT_USER_START, adminEditUserSaga);
 }
 
 export function* userSagas() {
@@ -144,5 +158,6 @@ export function* userSagas() {
     call(onUserSignUPStart),
     call(onSignUpSuccess),
     call(onEditUserStart),
+    call(onAdminEditUser),
   ]);
 }

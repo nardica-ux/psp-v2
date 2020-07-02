@@ -4,12 +4,28 @@ const INITIAL_STATE = {
   currentUser: null,
   isLogging: false,
   errMessage: null,
+  adminUpdating: false,
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     default:
       return state;
+    case userActionTypes.ADMIN_EDIT_USER_START:
+      return {
+        ...state,
+        adminUpdating: true,
+      };
+    case userActionTypes.ADMIN_EDIT_USER_SUCCESS:
+      return { ...state, adminUpdating: false };
+
+    case userActionTypes.LOGIN_USER_SUCCESS:
+      return {
+        ...state,
+        currentUser: action.payload,
+        isLogging: false,
+        errMessage: null,
+      };
 
     case userActionTypes.LOGOUT_USER_SUCCESS:
       return {
@@ -26,6 +42,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
         errMessage: null,
       };
     case userActionTypes.LOGIN_USER_FAILURE:
+    case userActionTypes.LOGOUT_USER_FAILURE:
     case userActionTypes.LOGOUT_USER_FAILURE:
       return {
         ...state,
@@ -44,14 +61,13 @@ const userReducer = (state = INITIAL_STATE, action) => {
         isLogging: true,
       };
     case userActionTypes.EDIT_USER_SUCCESS: {
-      const { displayName, type } = action.payload;
+      const { ...props } = action.payload;
       return {
         ...state,
         isLogging: false,
         currentUser: {
           ...state.currentUser,
-          displayName,
-          type,
+          ...props,
         },
       };
     }

@@ -19,11 +19,9 @@ async function getData(add) {
 
 export function* fetchMeetingsAsync() {
   try {
-    yield console.log("** SAGA async fetch fired");
     const meetingRef = firestore.collection("meetings");
     const snapshot = yield meetingRef.get();
     const data = yield call(getData, snapshot);
-    console.log(data);
     yield put(fetchMeetingsSuccess(data));
   } catch (err) {
     yield put(fetchMeetingsFailure(err));
@@ -31,6 +29,5 @@ export function* fetchMeetingsAsync() {
 }
 
 export function* fetchMeetingSagaStart() {
-  console.log("fetch in SAGA called");
   yield takeEvery(meetingsActionTypes.FETCH_MEETINGS_START, fetchMeetingsAsync);
 }

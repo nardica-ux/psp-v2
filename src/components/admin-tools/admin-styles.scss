@@ -1,0 +1,26 @@
+.user-table {
+  background: white;
+  width: 90%;
+  margin: auto;
+  th {
+    padding: 14px;
+    font-weight: 300;
+    text-transform: uppercase;
+  }
+  td {
+    text-align: left;
+    padding: 5px 20px;
+    font-size: 14px;
+  }
+  tr:hover {
+    border: 1px solid palegoldenrod;
+    cursor: pointer;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+  }
+  .even-row {
+    background: lemonchiffon;
+  }
+  .edit-row {
+    background: wheat;
+  }
+}

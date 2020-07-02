@@ -12,14 +12,14 @@ const UserTopBlock = ({
   if (displayName) initials = displayName.split(" ");
   let thisName = initials.map((el) => el.split("")[0]);
   return (
-    <button style={{ color: "white", marginLeft: "auto" }}>
+    <>
       <Link className="ava-user" to={"user/"}>
         {initials ? thisName.join("") : null}
       </Link>
       <button className="secondary" onClick={() => logout_user_start({ id })}>
         Sign Out
       </button>
-    </button>
+    </>
   );
 };
 const mapDispatchToProps = (dispatch) => {
