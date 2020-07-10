@@ -5,7 +5,12 @@ import "./comment-list.scss";
 import { addNewCommentRedux } from "../../redux/comments/comments-actions";
 import { CommentAddToFirebase } from "../../firebase/firebase-comments";
 
-function CommentItemAdd({ addNewCommentRedux, meeting_id, handleAddNews }) {
+function CommentItemAdd({
+  addNewCommentRedux,
+  meeting_id,
+  currentUser,
+  handleAddNews,
+}) {
   const [value, setValue] = useState("");
   const handleAdd = async () => {
     // if (value.lenth < 10 && value.split(" ").length < 4) {
@@ -40,9 +45,12 @@ function CommentItemAdd({ addNewCommentRedux, meeting_id, handleAddNews }) {
     </form>
   );
 }
+const mapStateToProps = (state) => ({
+  currentUser: state.users.currentUser,
+});
 const mapDispatchToProps = (dispatch) => {
   return {
     addNewCommentRedux: (el) => dispatch(addNewCommentRedux(el)),
   };
 };
-export default connect(null, mapDispatchToProps)(CommentItemAdd);
+export default connect(mapStateToProps, mapDispatchToProps)(CommentItemAdd);

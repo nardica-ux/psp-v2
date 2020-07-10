@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import "./admin-styles.scss";
 import { admin_update_user } from "../../redux/users/user-actions";

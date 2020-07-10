@@ -5,7 +5,7 @@ import MeetingCard from "../meeting-card/meeting-card.component";
 const MeetingList = ({ meetings: { meetings, meetIds } }) => {
   return (
     <div className="main-box">
-      {meetings
+      {meetings && meetings[0] !== null
         ? meetings.map((el, i) => (
             <MeetingCard key={meetIds[i]} num={i} id={meetIds[i]} data={el} />
           ))

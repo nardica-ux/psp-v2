@@ -3,20 +3,20 @@ import { firestore } from "./firebase.utils";
 export const CommentAddToFirebase = async (
   body,
   meeting_id,
-  user_id = "HJ0ZzqUDNnbMVUhdnbOybbvcKuz1"
+  user_id,
+  event_id = "Sat, July,12"
 ) => {
   try {
     let newComment = firestore.collection("meeting_comments").doc();
     let own_id = newComment.id;
     let date = new Date();
-    let tdate = date.toLocaleTimeString();
-    date = date.toLocaleDateString() + "-" + tdate.split(":").join("/");
+    let tdate = date.toString();
 
     await newComment.set({
       comment_id: own_id,
       meeting_id,
       user_id,
-      createdAt: date,
+      createdAt: tdate,
       body,
       type: "comment",
       vote_count: null,

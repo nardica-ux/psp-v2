@@ -16,16 +16,19 @@ const evaluationReducer = (state = INITIAL_STATE, action) => {
         isFetching: true,
       };
     case evalActionTypes.FETCH_EVALUATIONS_SUCCESS: {
-      let normalizedArr = {};
-      let data = action.payload.map((el) => Object.values(el)[0]);
-      data.map((el) => {
-        if (!normalizedArr[el.meeting_id]) normalizedArr[el.meeting_id] = [];
-        normalizedArr[el.meeting_id].push(el);
+      let evaluationData = [];
+      action.payload.map((el) => {
+        if (evaluationData[el.meeting_id]) {
+          evaluationData[el.meeting_id].push(el);
+        } else {
+          evaluationData = { ...evaluationData, [el.meeting_id]: [el] };
+        }
       });
       return {
         ...state,
         isFetching: false,
-        evaluationData: normalizedArr,
+        evaluationData: evaluationData,
+        errMessage: undefined,
       };
     }
     case evalActionTypes.FETCH_EVALUATIONS_FAILURE:
@@ -51,12 +54,11 @@ const evaluationReducer = (state = INITIAL_STATE, action) => {
       const { meeting_id } = action.payload;
       if (!state.evaluationData[meeting_id])
         state.evaluationData[meeting_id] = [];
-      let addNew = [...state.evaluationData[meeting_id], action.payload];
       return {
         ...state,
         evaluationData: {
           ...state.evaluationData,
-          [meeting_id]: [...addNew],
+          [meeting_id]: [...state.evaluationData[meeting_id], action.payload],
         },
       };
     }

@@ -4,9 +4,11 @@ import "./comment-list.scss";
 import CommentItem from "./comment-item.component";
 import CommentItemAdd from "./comment-add.component";
 import CommentTab from "./comment-tab.component";
+import CommentEventsTab from "./comments-event-tab";
 
-const CommentsList = ({ meeting_id, comments }) => {
+const CommentsList = ({ meeting_id, comments, past_events }) => {
   const data = [...comments.commentsData[meeting_id]];
+
   const [dataComm, setData] = useState(data);
 
   const handleAddNews = (el) => setData([...dataComm, el]);
@@ -35,9 +37,16 @@ const CommentsList = ({ meeting_id, comments }) => {
         setData([...data]);
     }
   };
-
+  const switchEvent = (num) => {
+    console.log(num);
+  };
   return (
     <div>
+      <CommentEventsTab
+        switchEvent={switchEvent}
+        meeting_id={meeting_id}
+        past_events={past_events}
+      />
       <CommentTab handleSort={handleSort} />
       {dataComm.length
         ? dataComm.map((el, i) => (

@@ -82,11 +82,14 @@ export const post_new_eval_async = (obj) => {
 };
 
 export const fetch_evaluations_start_async = () => {
-  return (dispatch) => {
-    dispatch(fetch_evaluations_start());
-    getBase("evaluations")
-      .then((res) => dispatch(fetch_evaluations_success(res)))
-      .catch((err) => dispatch(fetch_evaluations_failure(err)));
+  return async (dispatch) => {
+    try {
+      dispatch(fetch_evaluations_start());
+      let evaluations = await getBase("evaluations");
+      await dispatch(fetch_evaluations_success(evaluations));
+    } catch (err) {
+      dispatch(fetch_evaluations_failure(err));
+    }
   };
 };
 export const delete_eval_redux = (obj) => ({
@@ -95,12 +98,10 @@ export const delete_eval_redux = (obj) => ({
 });
 export const delete_eval_async = ({ id, meeting_id }) => {
   return (dispatch) => {
-    console.log(id);
     firestore
       .collection("evaluations")
       .doc(id)
       .delete()
-      .then((res) => console.log(res))
       .catch((err) => console.log(err.message));
     dispatch(delete_eval_redux({ id, meeting_id }));
   };

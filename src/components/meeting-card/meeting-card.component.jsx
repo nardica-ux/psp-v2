@@ -11,7 +11,7 @@ import EvalutionBlock from "../evaluations-list/evaluations-list.component";
 
 // ******************
 
-function MeetingCard({ data, id, setMeetingCards, meetingCards }) {
+function MeetingCard({ data, id, setMeetingCards, meetingCards, num }) {
   const [activeTab, setActiveTab] = useState(meetingCards[id]);
   const handleTab = (num) => {
     setActiveTab(num);
@@ -23,9 +23,16 @@ function MeetingCard({ data, id, setMeetingCards, meetingCards }) {
       default:
         break;
       case 0:
-        return <MeetingDescription data={data} />;
+        return (
+          <MeetingDescription
+            data={data}
+            meeting_id={id}
+            index={num}
+            past_events={data.past_events}
+          />
+        );
       case 1:
-        return <CommentsList meeting_id={id} />;
+        return <CommentsList meeting_id={id} past_events={data.past_events} />;
       case 2:
         return <EvalutionBlock meeting_id={id} />;
     }

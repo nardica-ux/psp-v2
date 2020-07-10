@@ -17,8 +17,23 @@ export const getBase = async (collectionKey) => {
   try {
     let meetingsSnap = await firestore.collection(collectionKey).get();
     let list = [];
+    const type_id = typeId(collectionKey);
+    function typeId(key) {
+      switch (key) {
+        default:
+          break;
+        case "meetings":
+          return "meeting_id";
+        case "users":
+          return "user_id";
+        case "evaluations":
+          return "evaluation_id";
+        case "meeting_comments":
+          return "comment_id";
+      }
+    }
     meetingsSnap.forEach((doc) => {
-      if (doc.exists) list.push({ [doc.id]: doc.data() });
+      if (doc.exists) list.push({ ...doc.data(), [type_id]: doc.id });
     });
     return list;
   } catch (err) {
@@ -38,6 +53,31 @@ export const updateCurrentUser = async (user) => {
     return userRef;
   } catch (err) {
     return false;
+  }
+};
+
+export const updateMeetingFire = async (meeting) => {
+  try {
+    const { author, body, platform, goal, meeting_id, defineEvent } = meeting;
+    const meetingRef = firestore.collection("meetings").doc(meeting_id);
+    if (author) await meetingRef.update({ author });
+    if (platform) await meetingRef.update({ platform });
+    if (goal) await meetingRef.update({ goal });
+    if (body) await meetingRef.update({ body });
+    if (defineEvent) {
+      let getMeeting = await meetingRef.get();
+      let new_past = `${defineEvent.date} at ${defineEvent.time} ${defineEvent.zone}`;
+      let meetingData = getMeeting.data();
+      if (!meetingData.past_events) meetingData.past_events = [];
+      await meetingRef.update({
+        past_events: [...meetingData.past_events, new_past],
+      });
+    }
+    const updatedEl = await meetingRef.get();
+    const elWithId = { ...updatedEl.data(), meeting_id };
+    return elWithId;
+  } catch (err) {
+    return err;
   }
 };
 

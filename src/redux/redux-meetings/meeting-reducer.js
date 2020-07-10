@@ -18,17 +18,50 @@ const meetingReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         meetingCards: cards,
-        meetings: [...arr],
+        meetings: [...action.payload],
         meetIds: [...Ids],
         isFetching: false,
       };
     }
+    case meetingsActionTypes.UPDATE_MEETING_START:
+      return { ...state, isFetching: true };
+
+    case meetingsActionTypes.UPDATE_MEETING_SUCCESS: {
+      const {
+        meeting_id,
+        body,
+        author,
+        goal,
+        platform,
+        past_events,
+      } = action.payload;
+      const updatedMeetings = state.meetings.map((el) => {
+        if (el.meeting_id === meeting_id) {
+          return (el = {
+            ...el,
+            goal,
+            author,
+            body,
+            platform,
+            past_events,
+          });
+        } else return el;
+      });
+      return {
+        ...state,
+        meetings: updatedMeetings,
+        isFetching: false,
+        errMessage: null,
+      };
+    }
+
     case meetingsActionTypes.FETCH_MEETINGS_START:
       return {
         ...state,
         isFetching: true,
       };
     case meetingsActionTypes.FETCH_MEETINGS_FAILURE:
+    case meetingsActionTypes.UPDATE_MEETING_FAILURE:
       return {
         ...state,
         isFetching: false,
