@@ -7,7 +7,12 @@ const MeetingList = ({ meetings: { meetings, meetIds } }) => {
     <div className="main-box">
       {meetings && meetings[0] !== null
         ? meetings.map((el, i) => (
-            <MeetingCard key={meetIds[i]} num={i} id={meetIds[i]} data={el} />
+            <MeetingCard
+              key={meetIds[i]}
+              num={i}
+              id={meetIds[i]}
+              title={el.title}
+            />
           ))
         : null}
     </div>

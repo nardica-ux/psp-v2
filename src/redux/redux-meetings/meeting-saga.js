@@ -41,6 +41,7 @@ export function* fetchMeetingsAsync() {
 }
 export function* meetingUpdateSaga({ payload }) {
   try {
+    console.log(payload);
     const updatedEl = yield call(updateMeetingFire, payload);
     yield put(update_meeting_success(updatedEl));
   } catch (err) {
@@ -51,7 +52,6 @@ export function* meetingUpdateSaga({ payload }) {
 export function* createMeetingSagaASync({ payload }) {
   try {
     const newMeeting = yield call(createMeetingFire, payload);
-    yield console.log(newMeeting);
     yield put(createNewMeetingSuccess(newMeeting));
   } catch (err) {
     yield put(createNewMeetingFailure(err));

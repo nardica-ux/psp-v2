@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -8,13 +8,13 @@ import MeetingDescription from "./meeting-descr.component";
 import CommentsList from "../comments-list/comments.list.component";
 import TabHeader from "./card-content-tab";
 import EvalutionBlock from "../evaluations-list/evaluations-list.component";
-import CardEventsTab from "./card-event-tab";
+import CardEventsTab from "../event-components/card-event-tab";
 
 // ******************
 
 function MeetingCard({
-  data,
   id,
+  title,
   setMeetingCards,
   meetingCards,
   num,
@@ -31,34 +31,27 @@ function MeetingCard({
       default:
         break;
       case 0:
-        return (
-          <MeetingDescription
-            data={data}
-            meeting_id={id}
-            index={num}
-            past_events={data.past_events}
-          />
-        );
+        return <MeetingDescription meeting_id={id} num={num} />;
       case 1:
-        return <CommentsList meeting_id={id} past_events={data.past_events} />;
+        return <CommentsList meeting_id={id} />;
       case 2:
         return <EvalutionBlock meeting_id={id} />;
     }
   };
   return (
     <div className="card">
+      <TabHeader tab={activeTab} handleTab={handleTab} id={id} />
       <Link
         className="title"
         style={{ color: "slateblue", float: "right" }}
         to={`meeting/${id}`}
       >
-        {data.title}
+        {title}
       </Link>
-      <TabHeader tab={activeTab} handleTab={handleTab} id={id} />
       <CardEventsTab
         meeting_id={id}
-        past_events={data.past_events}
         currentEvent={activeEvents[id]}
+        num={num}
       />
       {tabContent(activeTab)}
     </div>

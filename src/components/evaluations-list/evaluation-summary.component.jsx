@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
+
 import "./evaluation-block.scss";
 import { connect } from "react-redux";
 import { colors } from "./eval-color";
@@ -114,9 +114,7 @@ const EvaluationSummary = ({ meeting_id, event_id, evaluationData }) => {
           />
         </span>
       </form>
-      <div className="chart-table">
-        {output()} {/* the graph element */}
-      </div>
+      <div className="chart-table">{output()}</div>
     </React.Fragment>
   );
 };

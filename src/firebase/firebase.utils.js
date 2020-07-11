@@ -56,22 +56,56 @@ export const updateCurrentUser = async (user) => {
   }
 };
 
+export const createEventFire = async ({
+  meeting_id,
+  user_id,
+  date,
+  link = "http://some-link",
+  platform = "zoom",
+  user_name,
+  user_email,
+}) => {
+  if (!user_id) return;
+  const eventRef = firestore.collection("events").doc();
+  const event_id = eventRef.id;
+  try {
+    await eventRef.set({
+      event_id,
+      meeting_id,
+      org_id: user_id,
+      createdAt: new Date(),
+      platform,
+      date,
+      link,
+      participants: [],
+      question: [],
+      topics: [],
+      org_name: user_name,
+      org_email: user_email,
+    });
+    let newEl = await updateMeetingFire({ meeting_id, event: event_id });
+    console.log(newEl);
+    let eventData = await eventRef.get();
+    return eventData.data();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const updateMeetingFire = async (meeting) => {
   try {
-    const { author, body, platform, goal, meeting_id, defineEvent } = meeting;
+    const { author, body, platform, goal, meeting_id, title, event } = meeting;
     const meetingRef = firestore.collection("meetings").doc(meeting_id);
     if (author) await meetingRef.update({ author });
     if (platform) await meetingRef.update({ platform });
     if (goal) await meetingRef.update({ goal });
     if (body) await meetingRef.update({ body });
-    if (defineEvent) {
-      let getMeeting = await meetingRef.get();
-      let new_past = `${defineEvent.date} at ${defineEvent.time} ${defineEvent.zone}`;
-      let meetingData = getMeeting.data();
-      if (!meetingData.past_events) meetingData.past_events = [];
-      await meetingRef.update({
-        past_events: [...meetingData.past_events, new_past],
-      });
+    if (title) await meetingRef.update({ title });
+    if (event) {
+      let addEventToMeeting = await meetingRef.get();
+      let data = addEventToMeeting.data();
+      data.events.push(event);
+      await meetingRef.update({ events: data.events });
     }
     const updatedEl = await meetingRef.get();
     const elWithId = { ...updatedEl.data(), meeting_id };
@@ -90,7 +124,7 @@ export const createMeetingFire = async (payload) => {
   try {
     await meetingRef.set({
       meeting_id,
-      user_id,
+      org_id: user_id,
       author,
       goal,
       summary,
@@ -98,7 +132,6 @@ export const createMeetingFire = async (payload) => {
       platform,
     });
     let meetingData = meetingRef.get();
-    console.log(meetingData.data());
     return meetingData.data();
   } catch (err) {
     console.log("error creating meeting ", err.message);
