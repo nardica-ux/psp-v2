@@ -18,6 +18,7 @@ const CommentItem = ({
   handleDel,
   deleteCommentFromRedux,
   voteCommentInRedux,
+  currentEvent,
 }) => {
   const [vote, setVotes] = useState(el.vote_count);
   const handleDelComment = async (id) => {
@@ -34,10 +35,15 @@ const CommentItem = ({
       setVotes(vote + num);
     }
   };
+  let nameInitials = "XYZ";
+  if (el.displayName) {
+    nameInitials = el.displayName.split(" ")[0];
+    nameInitials = nameInitials.join("");
+  }
 
   return (
     <div className="comment-item">
-      <div className="comment-avatar">{el.user_id.split("").splice(0, 3)}</div>
+      <div className="comment-avatar">{nameInitials}</div>
 
       <div key={id} className="comment-body">
         <div style={{ float: "left" }}>

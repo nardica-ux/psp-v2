@@ -4,21 +4,23 @@ import "./comment-list.scss";
 import CommentItem from "./comment-item.component";
 import CommentItemAdd from "./comment-add.component";
 import CommentTab from "./comment-tab.component";
-import CommentEventsTab from "./comments-event-tab";
 
-const CommentsList = ({ meeting_id, comments, past_events }) => {
-  const data = [...comments.commentsData[meeting_id]];
-
-  const [dataComm, setData] = useState(data);
-
-  const handleAddNews = (el) => setData([...dataComm, el]);
+const CommentsList = ({
+  meeting_id,
+  commentsData,
+  activeEvents,
+}) => {
+  const currentEvent = `${meeting_id}%%${activeEvents[meeting_id]}`;
+  const [dataComm, setData] = useState(commentsData[meeting_id] || null);
 
   const handleDel = () => {
-    let update = [...comments.commentsData[meeting_id]];
+    let update = [...commentsData[meeting_id]];
     setData([...update]);
   };
 
   const handleSort = (num) => {
+    let data = [];
+    if (commentsData) data = commentsData[meeting_id][currentEvent];
     switch (num) {
       case 0:
         {
@@ -37,34 +39,29 @@ const CommentsList = ({ meeting_id, comments, past_events }) => {
         setData([...data]);
     }
   };
-  const switchEvent = (num) => {
-    console.log(num);
-  };
+
   return (
     <div>
-      <CommentEventsTab
-        switchEvent={switchEvent}
-        meeting_id={meeting_id}
-        past_events={past_events}
-      />
-      <CommentTab handleSort={handleSort} />
-      {dataComm.length
-        ? dataComm.map((el, i) => (
+      {/* <CommentTab handleSort={handleSort} /> */}
+      {dataComm && dataComm[currentEvent]
+        ? dataComm[currentEvent].map((el, i) => (
             <CommentItem
               el={el}
               id={el.comment_id}
               meeting_id={meeting_id}
               key={meeting_id + i}
               handleDel={handleDel}
+              currentEvent={currentEvent}
             />
           ))
         : null}
-      <CommentItemAdd meeting_id={meeting_id} handleAddNews={handleAddNews} />
+      <CommentItemAdd meeting_id={meeting_id} />
     </div>
   );
 };
 const mapStateToProps = (state) => ({
-  comments: state.comments,
+  commentsData: state.comments.commentsData,
+  activeEvents: state.meetings.activeEvents,
 });
 
 export default connect(mapStateToProps)(CommentsList);

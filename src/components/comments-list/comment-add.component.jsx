@@ -2,44 +2,46 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import "./comment-list.scss";
 
-import { addNewCommentRedux } from "../../redux/comments/comments-actions";
-import { CommentAddToFirebase } from "../../firebase/firebase-comments";
+import { addNewCommentStart } from "../../redux/comments/comments-actions";
 
 function CommentItemAdd({
-  addNewCommentRedux,
+  addNewCommentStart,
   meeting_id,
   currentUser,
-  handleAddNews,
+  activeEvents,
 }) {
-  const [value, setValue] = useState("");
-  const handleAdd = async () => {
-    // if (value.lenth < 10 && value.split(" ").length < 4) {
-    //   alert("please elaborate a bit more");
-    //   return;
-    // }
-    //add to database
-    let newComment = await CommentAddToFirebase(value, meeting_id);
+  const [body, setValue] = useState("");
 
-    if (newComment) {
-      console.log(newComment);
-      //if Ok add to Redux
-      addNewCommentRedux(newComment);
-      // callback to parent to update this list of comments
-      handleAddNews(newComment);
-    }
-  };
+  // if (value.lenth < 10 && value.split(" ").length < 4) {
+  //   alert("please elaborate a bit more");
+  //   return}
+  let user_name = currentUser.displayName;
+  let user_id = currentUser.id;
+  let event_date = activeEvents[meeting_id];
 
   return (
     <form className="form-comment-add">
       <input
         type="text"
         placeholder="add your item"
-        value={value}
+        value={body}
         onChange={(e) => {
           setValue(e.target.value);
         }}
       />
-      <button className="main" type="button" onClick={() => handleAdd()}>
+      <button
+        className="main"
+        type="button"
+        onClick={() =>
+          addNewCommentStart({
+            body,
+            meeting_id,
+            user_id,
+            event_date,
+            user_name,
+          })
+        }
+      >
         Add
       </button>
     </form>
@@ -47,10 +49,11 @@ function CommentItemAdd({
 }
 const mapStateToProps = (state) => ({
   currentUser: state.users.currentUser,
+  activeEvents: state.meetings.activeEvents,
 });
 const mapDispatchToProps = (dispatch) => {
   return {
-    addNewCommentRedux: (el) => dispatch(addNewCommentRedux(el)),
+    addNewCommentStart: (el) => dispatch(addNewCommentStart(el)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CommentItemAdd);

@@ -8,9 +8,14 @@ import EvaluationSummary from "./evaluation-summary.component";
 import EvaluationsQuotes from "./evaluation-quotes.component";
 import { setEvaluationTab } from "../../redux/evaluations/evaluation-actions";
 
-function EvaluationBlock({ meeting_id, evaluations, setEvaluationTab }) {
-  const { evaluationData, evalTabs } = evaluations;
+function EvaluationBlock({
+  meeting_id,
+  evalTabs,
+  setEvaluationTab,
+  activeEvents,
+}) {
   const [tab, setTab] = useState(evalTabs[meeting_id]);
+  const currentEvent = activeEvents[meeting_id];
 
   const handleTab = (num) => {
     setTab(num);
@@ -23,7 +28,7 @@ function EvaluationBlock({ meeting_id, evaluations, setEvaluationTab }) {
         return (
           <EvaluationSummary
             meeting_id={meeting_id}
-            summary={evaluationData ? evaluationData[meeting_id] : []}
+            event_id={currentEvent}
             tab={tab}
           />
         );
@@ -50,7 +55,8 @@ EvaluationBlock.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  evaluations: state.evaluations,
+  evalTabs: state.evaluations.evalTabs,
+  activeEvents: state.meetings.activeEvents,
 });
 const mapDispatchToProps = (dispatch) => {
   return {

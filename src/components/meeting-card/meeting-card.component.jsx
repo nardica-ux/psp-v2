@@ -8,10 +8,18 @@ import MeetingDescription from "./meeting-descr.component";
 import CommentsList from "../comments-list/comments.list.component";
 import TabHeader from "./card-content-tab";
 import EvalutionBlock from "../evaluations-list/evaluations-list.component";
+import CardEventsTab from "./card-event-tab";
 
 // ******************
 
-function MeetingCard({ data, id, setMeetingCards, meetingCards, num }) {
+function MeetingCard({
+  data,
+  id,
+  setMeetingCards,
+  meetingCards,
+  num,
+  activeEvents,
+}) {
   const [activeTab, setActiveTab] = useState(meetingCards[id]);
   const handleTab = (num) => {
     setActiveTab(num);
@@ -47,12 +55,18 @@ function MeetingCard({ data, id, setMeetingCards, meetingCards, num }) {
         {data.title}
       </Link>
       <TabHeader tab={activeTab} handleTab={handleTab} id={id} />
+      <CardEventsTab
+        meeting_id={id}
+        past_events={data.past_events}
+        currentEvent={activeEvents[id]}
+      />
       {tabContent(activeTab)}
     </div>
   );
 }
 const mapStateToProps = (state) => ({
   meetingCards: state.meetings.meetingCards,
+  activeEvents: state.meetings.activeEvents,
 });
 const mapDispatchToProps = (dispatch) => {
   return {

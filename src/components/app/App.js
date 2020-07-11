@@ -9,6 +9,7 @@ import MainPage from "../../pages/main-page";
 import MeetingPage from "../../pages/meeting-page";
 import UserPage from "../../pages/user-page";
 import UserEditTable from "../admin-tools/user-table";
+import EvalsEditTable from "../admin-tools/evaluations-edit-table";
 
 import { fetchMeetingsStart } from "../../redux/redux-meetings/meeting-actions";
 import { fetchCommentsStart } from "../../redux/comments/comments-actions";
@@ -65,7 +66,8 @@ class App extends Component {
           <Route exact path="/" component={MainPage} />
           <Route path="/meeting/:meeting_id" component={MeetingPage} />
           <Route exact path="/user" component={UserPage} />
-          <Route path="/usertable" component={UserEditTable} />
+          <Route path="/user/table" component={UserEditTable} />
+          <Route path="/evals/table" component={EvalsEditTable} />
         </Switch>
       </div>
     );

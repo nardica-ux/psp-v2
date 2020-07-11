@@ -6,6 +6,7 @@ const INITIAL_STATE = {
   meetingCards: {},
   isFetching: false,
   errMessage: undefined,
+  activeEvents: null,
 };
 
 const meetingReducer = (state = INITIAL_STATE, action) => {
@@ -15,17 +16,39 @@ const meetingReducer = (state = INITIAL_STATE, action) => {
       let cards = {};
       arr.forEach((el) => Object.assign(cards, { [el.meeting_id]: 0 }));
       let Ids = arr.map((el) => el.meeting_id);
+      let activeEvents = {};
+
+      Ids.map((el, i) => {
+        if (arr[i].past_events) {
+          let lastEl = arr[i].past_events.length - 1;
+          activeEvents = {
+            ...activeEvents,
+            [el]: arr[i].past_events[lastEl],
+          };
+        }
+      });
       return {
         ...state,
         meetingCards: cards,
-        meetings: [...action.payload],
+        meetings: [...arr],
         meetIds: [...Ids],
         isFetching: false,
+        activeEvents,
       };
     }
     case meetingsActionTypes.UPDATE_MEETING_START:
       return { ...state, isFetching: true };
 
+    case meetingsActionTypes.POINT_EVENT_TOREDUX: {
+      const { meeting_id, el } = action.payload;
+      return {
+        ...state,
+        activeEvents: {
+          ...state.activeEvents,
+          [meeting_id]: el,
+        },
+      };
+    }
     case meetingsActionTypes.UPDATE_MEETING_SUCCESS: {
       const {
         meeting_id,

@@ -2,16 +2,7 @@
   background: white;
   width: 90%;
   margin: auto;
-  th {
-    padding: 14px;
-    font-weight: 300;
-    text-transform: uppercase;
-  }
-  td {
-    text-align: left;
-    padding: 5px 20px;
-    font-size: 14px;
-  }
+
   tr:hover {
     border: 1px solid palegoldenrod;
     cursor: pointer;
@@ -23,4 +14,14 @@
   .edit-row {
     background: wheat;
   }
+}
+th {
+  padding: 12px;
+  font-weight: 300;
+  // text-transform: uppercase;
+}
+td {
+  text-align: left;
+  padding: 5px 20px;
+  font-size: 14px;
 }

@@ -1,0 +1,32 @@
+.tab-set {
+  width: 96%;
+  margin: auto;
+  margin-bottom: 16px;
+  border: 1px solid rgb(193, 188, 223);
+  legend {
+    color: slateblue;
+    font-size: 12px;
+    text-align: left;
+  }
+}
+.tab-container {
+  display: flex;
+  justify-content: space-evenly;
+
+  .active-event {
+    color: slateblue;
+    text-decoration: underline;
+    padding: 5px;
+    font-size: 14px;
+  }
+  .link-tab {
+    cursor: pointer;
+    font-size: 14px;
+    color: royalblue;
+    padding: 5px;
+    &:hover {
+      background: whitesmoke;
+      border-radius: 8px;
+    }
+  }
+}

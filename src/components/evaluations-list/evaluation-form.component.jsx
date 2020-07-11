@@ -8,7 +8,12 @@ import {
   set_posted_success,
 } from "../../redux/evaluations/evaluation-actions";
 
-const EvaluationForm = ({ post_new_eval_async, meeting_id, currentUser }) => {
+const EvaluationForm = ({
+  post_new_eval_async,
+  meeting_id,
+  currentUser,
+  activeEvents,
+}) => {
   const [difficulty, set_difficulty] = useState(10);
   const [intensity, set_intensity] = useState(10);
   const [unity, set_unity] = useState(10);
@@ -16,6 +21,7 @@ const EvaluationForm = ({ post_new_eval_async, meeting_id, currentUser }) => {
   const [review, setReview] = useState("");
   let user_id;
   let user_email;
+  const event_id = activeEvents[meeting_id];
   if (currentUser) {
     user_id = currentUser.id;
     user_email = currentUser.email;
@@ -71,13 +77,16 @@ const EvaluationForm = ({ post_new_eval_async, meeting_id, currentUser }) => {
       />
       <br />
       <label htmlFor="review">
-        Evaluate the overall level of value from this meeting
+        If you can be more specific, please, elaborate about the feel from this
+        meeting
       </label>
       <br />
-      <input
+      <textarea
         name="review"
         type="text"
         value={review}
+        columns="70"
+        rows="5"
         onChange={(e) => setReview(e.target.value)}
       />
       <div>
@@ -97,6 +106,7 @@ const EvaluationForm = ({ post_new_eval_async, meeting_id, currentUser }) => {
               review,
               user_id,
               user_email,
+              event_id,
             })
           }
         >
@@ -111,6 +121,7 @@ const EvaluationForm = ({ post_new_eval_async, meeting_id, currentUser }) => {
 const mapStateToProps = (state) => ({
   evaluationStatus: state.evaluations.isPosting,
   currentUser: state.users.currentUser,
+  activeEvents: state.meetings.activeEvents,
 });
 
 const mapDispatchToProps = (dispatch) => {

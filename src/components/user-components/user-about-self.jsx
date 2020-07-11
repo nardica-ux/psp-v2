@@ -14,8 +14,13 @@ const UserAboutSelf = ({ currentUser }) => {
         profile {displayName} // type: {type}
       </h3>
       {type === "admin" ? (
-        <Link style={{ color: "slateblue" }} to="/usertable">
+        <Link style={{ color: "slateblue", marginLeft: 20 }} to="/user/table">
           User Table
+        </Link>
+      ) : null}
+      {type === "admin" ? (
+        <Link style={{ color: "slateblue", marginLeft: 20 }} to="/evals/table">
+          Evaluations Table
         </Link>
       ) : null}
       <div className="user-about-top">

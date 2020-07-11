@@ -16,18 +16,20 @@ const evaluationReducer = (state = INITIAL_STATE, action) => {
         isFetching: true,
       };
     case evalActionTypes.FETCH_EVALUATIONS_SUCCESS: {
-      let evaluationData = [];
+      let evaluationData = {};
       action.payload.map((el) => {
-        if (evaluationData[el.meeting_id]) {
-          evaluationData[el.meeting_id].push(el);
-        } else {
-          evaluationData = { ...evaluationData, [el.meeting_id]: [el] };
+        if (!evaluationData[el.meeting_id]) {
+          evaluationData[el.meeting_id] = {};
         }
+        if (!evaluationData[el.meeting_id][el.event_id]) {
+          evaluationData[el.meeting_id][el.event_id] = [];
+        }
+        evaluationData[el.meeting_id][el.event_id].push(el);
       });
       return {
         ...state,
         isFetching: false,
-        evaluationData: evaluationData,
+        evaluationData,
         errMessage: undefined,
       };
     }
@@ -51,14 +53,23 @@ const evaluationReducer = (state = INITIAL_STATE, action) => {
         isPosting: true,
       };
     case evalActionTypes.POST_NEW_EVALUATION_FBASE_SUCCESS: {
-      const { meeting_id } = action.payload;
-      if (!state.evaluationData[meeting_id])
-        state.evaluationData[meeting_id] = [];
+      const { meeting_id, event_id } = action.payload;
+      if (
+        !state.evaluationData[meeting_id] ||
+        !state.evaluationData[meeting_id][event_id]
+      )
+        state.evaluationData[meeting_id] = { [event_id]: [] };
       return {
         ...state,
         evaluationData: {
           ...state.evaluationData,
-          [meeting_id]: [...state.evaluationData[meeting_id], action.payload],
+          [meeting_id]: {
+            ...state.evaluationData[meeting_id],
+            [event_id]: [
+              ...state.evaluationData[meeting_id][event_id],
+              action.payload,
+            ],
+          },
         },
       };
     }
@@ -72,10 +83,9 @@ const evaluationReducer = (state = INITIAL_STATE, action) => {
       return (state = INITIAL_STATE);
 
     case evalActionTypes.DELETE_EVALUATION_REDUX: {
-      const { id, meeting_id } = action.payload;
-      let updated = state.evaluationData[meeting_id].filter(
-        (el) => el.evaluation_id !== id
-      );
+      const { id, meeting_id, event_id } = action.payload;
+      let updated = [...state.evaluationData[meeting_id][event_id]];
+      updated.filter((el) => el.evaluation_id !== id);
       return {
         ...state,
         evaluationData: {

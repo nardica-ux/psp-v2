@@ -1,17 +1,19 @@
 import { firestore } from "../../firebase/firebase.utils";
-import { takeEvery, call, put } from "redux-saga/effects";
-
+import { takeEvery, call, put, all } from "redux-saga/effects";
+import { CommentAddToFirebase } from "../../firebase/firebase-comments";
 import {
   fetchCommentsSuccess,
   fetchCommentsFailure,
   commentsActionTypes,
+  addNewCommentSuccess,
+  addNewCommentFailure,
 } from "../comments/comments-actions";
 
 async function getData(add) {
   let result = [];
   add.forEach((doc) => {
     let id = doc.id;
-    let res = { ...doc.data(), meeting_id: id };
+    let res = { ...doc.data(), comment_id: id };
     result.push(res);
   });
   return result;
@@ -27,6 +29,23 @@ export function* fetchCommentsAsync() {
   }
 }
 
+export function* addNewCommentSaga({ payload }) {
+  try {
+    const newComment = yield call(CommentAddToFirebase, payload);
+    yield put(addNewCommentSuccess(newComment));
+  } catch (err) {
+    yield put(addNewCommentFailure(err));
+  }
+}
+
 export function* fetchCommentSagaStart() {
-  yield takeEvery(commentsActionTypes.FETCH_comments_START, fetchCommentsAsync);
+  yield takeEvery(commentsActionTypes.FETCH_COMMENTS_START, fetchCommentsAsync);
+}
+
+export function* onNewCommentSagaStart() {
+  yield takeEvery(commentsActionTypes.ADD_COMMENT_REDUX, addNewCommentSaga);
+}
+
+export function* commentSagas() {
+  yield all([call(fetchCommentSagaStart), call(onNewCommentSagaStart)]);
 }

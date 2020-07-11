@@ -6,11 +6,14 @@ import { colors } from "./eval-color";
 
 import EvaluationItem from "./evaluation-item";
 
-const EvaluationSummary = ({ summary, meeting_id }) => {
+const EvaluationSummary = ({ meeting_id, event_id, evaluationData }) => {
   const newLine = (arr, prop) => {
     if (!arr.length) return [];
     return arr.map((el) => el[prop]);
   };
+  let summary = [];
+  if (evaluationData[meeting_id] && evaluationData[meeting_id][event_id])
+    summary = [...evaluationData[meeting_id][event_id]];
 
   const [showDigits, setShowDigits] = useState(false);
   const [showDiff, setShowDiff] = useState(true);
@@ -117,15 +120,13 @@ const EvaluationSummary = ({ summary, meeting_id }) => {
     </React.Fragment>
   );
 };
-
-EvaluationSummary.propTypes = {
-  // summary: PropTypes.array.isRequired,
-  meeting_id: PropTypes.string.isRequired,
-};
+const mapStateToProps = (state) => ({
+  evaluationData: state.evaluations.evaluationData,
+});
 const mapDispatchToProps = (dispatch) => {
   return {
     // delete_eval_async: (obj) => dispatch(delete_eval_async(obj)),
   };
 };
 
-export default connect(null, mapDispatchToProps)(EvaluationSummary);
+export default connect(mapStateToProps, mapDispatchToProps)(EvaluationSummary);

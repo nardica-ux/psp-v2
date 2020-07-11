@@ -1,4 +1,8 @@
-import { firestore, updateMeetingFire } from "../../firebase/firebase.utils";
+import {
+  firestore,
+  updateMeetingFire,
+  createMeetingFire,
+} from "../../firebase/firebase.utils";
 
 import { takeEvery, call, put, all } from "redux-saga/effects";
 import {
@@ -7,6 +11,8 @@ import {
   meetingsActionTypes,
   update_meeting_success,
   update_meeting_failure,
+  createNewMeetingFailure,
+  createNewMeetingSuccess,
 } from "../redux-meetings/meeting-actions";
 
 async function getData(snapShot) {
@@ -18,11 +24,6 @@ async function getData(snapShot) {
     // );
     // console.log(past_events);
     let res = { ...doc.data(), meeting_id: id };
-    console.log(
-      res.past_instances
-        ? res.past_instances.map((el) => new Date(el.seconds))
-        : null
-    );
     result.push(res);
   });
   return result;
@@ -47,6 +48,16 @@ export function* meetingUpdateSaga({ payload }) {
   }
 }
 
+export function* createMeetingSagaASync({ payload }) {
+  try {
+    const newMeeting = yield call(createMeetingFire, payload);
+    yield console.log(newMeeting);
+    yield put(createNewMeetingSuccess(newMeeting));
+  } catch (err) {
+    yield put(createNewMeetingFailure(err));
+  }
+}
+
 export function* fetchMeetingSagaStart() {
   yield takeEvery(meetingsActionTypes.FETCH_MEETINGS_START, fetchMeetingsAsync);
 }
@@ -54,7 +65,17 @@ export function* fetchMeetingSagaStart() {
 export function* onMeetingUpdateStart() {
   yield takeEvery(meetingsActionTypes.UPDATE_MEETING_START, meetingUpdateSaga);
 }
+export function* onMeetingCreateStart() {
+  yield takeEvery(
+    meetingsActionTypes.CREATE_NEW_MEETING,
+    createMeetingSagaASync
+  );
+}
 
 export function* MeetingSagas() {
-  yield all([call(fetchMeetingSagaStart), call(onMeetingUpdateStart)]);
+  yield all([
+    call(fetchMeetingSagaStart),
+    call(onMeetingUpdateStart),
+    call(onMeetingCreateStart),
+  ]);
 }

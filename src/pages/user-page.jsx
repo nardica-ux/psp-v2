@@ -33,11 +33,11 @@ const UserPage = ({
     // onClick={() => props.history.pushState(`${props.match.url}${id}`)}
     >
       <UserAboutSelf currentUser={currentUser} />
-      <UserEvaluations
+      {/* <UserEvaluations
         meetingTitles={meetingTitles}
         meetIds={meetIds}
         userEvaluations={getUserData(id, "evaluations")}
-      />
+      /> */}
       <h3>My Comments</h3>
       <div>shall see comments user made</div>
     </div>

@@ -8,7 +8,30 @@ export const meetingsActionTypes = {
   UPDATE_MEETING_START: "UPDATE_MEETING_START",
   UPDATE_MEETING_SUCCESS: "UPDATE_MEETING_SUCCESS",
   UPDATE_MEETING_FAILURE: "UPDATE_MEETING_FAILURE",
+
+  POINT_EVENT_TOREDUX: "POINT_EVENT_TOREDUX",
+  CREATE_NEW_MEETING: "CREATE_NEW_MEETING",
+  CREATE_NEW_MEETING_SUCCESS: "CREATE_NEW_MEETING_SUCCESS",
+  CREATE_NEW_MEETING_FAILURE: "CREATE_NEW_MEETING_FAILURE",
 };
+
+export const createNewMeetingStart = (obj) => ({
+  type: meetingsActionTypes.CREATE_NEW_MEETING,
+  payload: obj,
+});
+export const createNewMeetingSuccess = (obj) => ({
+  type: meetingsActionTypes.CREATE_NEW_MEETING_SUCCESS,
+  payload: obj,
+});
+export const createNewMeetingFailure = (err) => ({
+  type: meetingsActionTypes.CREATE_NEW_MEETING_FAILURE,
+  payload: err,
+});
+
+export const pointEventToRedux = (obj) => ({
+  type: meetingsActionTypes.POINT_EVENT_TOREDUX,
+  payload: obj,
+});
 
 export const update_meeting_start = (obj) => ({
   type: meetingsActionTypes.UPDATE_MEETING_START,

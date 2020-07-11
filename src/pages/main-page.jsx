@@ -1,13 +1,19 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useState } from "react";
+
 import MeetingList from "../components/meeting-card/meeting-list.component";
+import AddMeetingForm from "../components/admin-tools/add_meeting-form";
 
-// get sorting logic to filter or sort meetings,
+const MainPage = () => {
+  const [editing, setEditingMode] = useState(false);
 
-const MainPage = () => (
-  <>
-    <MeetingList />
-  </>
-);
+  return (
+    <>
+      <button onClick={() => setEditingMode(!editing)} className="main">
+        {editing ? "Close" : "Create Meeting"}
+      </button>
+      {editing ? <AddMeetingForm /> : <MeetingList />}
+    </>
+  );
+};
 
-export default connect(null)(MainPage);
+export default MainPage;

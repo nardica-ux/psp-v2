@@ -58,6 +58,7 @@ export const post_new_eval_async = (obj) => {
       unity,
       valueTotal,
       review,
+      event_id,
     } = obj;
 
     let evalRef = firestore.collection("evaluations").doc();
@@ -75,6 +76,7 @@ export const post_new_eval_async = (obj) => {
         user_id,
         review,
         user_email,
+        event_id,
       })
       .catch((err) => dispatch(post_new_eval_failure(err)));
     evalRef.get().then((res) => dispatch(post_new_eval_success(res.data())));

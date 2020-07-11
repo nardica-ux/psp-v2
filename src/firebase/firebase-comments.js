@@ -1,25 +1,29 @@
 import { firestore } from "./firebase.utils";
 
-export const CommentAddToFirebase = async (
+export const CommentAddToFirebase = async ({
   body,
   meeting_id,
   user_id,
-  event_id = "Sat, July,12"
-) => {
+  event_date,
+  user_name,
+}) => {
   try {
     let newComment = firestore.collection("meeting_comments").doc();
-    let own_id = newComment.id;
-    let date = new Date();
-    let tdate = date.toString();
+    let comment_id = newComment.id;
+    let todate = new Date();
+    todate = todate.toString();
+    console.log(body, meeting_id, user_id, event_date, user_name);
 
     await newComment.set({
-      comment_id: own_id,
+      user_name,
+      comment_id,
       meeting_id,
       user_id,
-      createdAt: tdate,
+      createdAt: todate,
       body,
       type: "comment",
       vote_count: null,
+      event_id: `${meeting_id}%%${event_date}`,
     });
     let newCom = await newComment.get();
     return newCom.data();

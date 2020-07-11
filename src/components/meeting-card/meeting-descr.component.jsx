@@ -14,8 +14,8 @@ function MeetingDescription({ data, update_meeting_start, meeting_id, index }) {
   const [newPlatform, setPlatform] = useState(platform);
   const [update, setUpdate] = useState(0);
   const [defineEvent, setEvent] = useState({
-    date: null,
-    time: null,
+    date: "",
+    time: "",
     zone: "PM",
   });
 

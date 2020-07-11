@@ -80,6 +80,30 @@ export const updateMeetingFire = async (meeting) => {
     return err;
   }
 };
+export const createMeetingFire = async (payload) => {
+  if (!payload) return;
+
+  const meetingRef = firestore.collection("meetings").doc();
+  const { author, goal, summary, platform, user_id } = payload;
+  const createdAt = new Date().toString();
+  const meeting_id = meetingRef.id;
+  try {
+    await meetingRef.set({
+      meeting_id,
+      user_id,
+      author,
+      goal,
+      summary,
+      createdAt,
+      platform,
+    });
+    let meetingData = meetingRef.get();
+    console.log(meetingData.data());
+    return meetingData.data();
+  } catch (err) {
+    console.log("error creating meeting ", err.message);
+  }
+};
 
 export const createUserProfile = async (user, additionalData) => {
   if (!user) return;
@@ -90,7 +114,7 @@ export const createUserProfile = async (user, additionalData) => {
   if (!snapShot.exists) {
     const { email, uid, displayName } = user;
     if (displayName === undefined) displayName = additionalData.displayName;
-    const createdAt = new Date().toLocaleTimeString();
+    const createdAt = new Date().toString();
     try {
       await userRef.set({
         id: uid,
