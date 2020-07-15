@@ -30,10 +30,16 @@ export const getBase = async (collectionKey) => {
           return "evaluation_id";
         case "meeting_comments":
           return "comment_id";
+        case "events":
+          return "event_id";
       }
     }
     meetingsSnap.forEach((doc) => {
-      if (doc.exists) list.push({ ...doc.data(), [type_id]: doc.id });
+      if (doc.exists)
+        list.push({
+          ...doc.data(),
+          // [type_id]: doc.id
+        });
     });
     return list;
   } catch (err) {
@@ -84,7 +90,6 @@ export const createEventFire = async ({
       org_email: user_email,
     });
     let newEl = await updateMeetingFire({ meeting_id, event: event_id });
-    console.log(newEl);
     let eventData = await eventRef.get();
     return eventData.data();
   } catch (err) {

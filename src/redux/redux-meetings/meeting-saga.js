@@ -41,7 +41,6 @@ export function* fetchMeetingsAsync() {
 }
 export function* meetingUpdateSaga({ payload }) {
   try {
-    console.log(payload);
     const updatedEl = yield call(updateMeetingFire, payload);
     yield put(update_meeting_success(updatedEl));
   } catch (err) {

@@ -1,0 +1,19 @@
+
+
+######### PROJECT STRUCTURE #########
+
+Nadia ERokhina - UX design-research, MVP definition, presentations, UI development
+Jane Drake - business analyst, project manager
+Dan Barvitsky - system architect 
+
+1. idea summary: 
+pain - market - solution - competitors - advantages 
+
+2. personas and boards
+use cases - storyboards - screen flows 
+
+3. technical summary
+MVP description
+
+
+

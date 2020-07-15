@@ -21,9 +21,14 @@ function MeetingCard({
   activeEvents,
 }) {
   const [activeTab, setActiveTab] = useState(meetingCards[id]);
-  const handleTab = (num) => {
+  const [currentEvent, setCurrentEvent] = useState(activeEvents[id]);
+
+  const handleCardTab = (num) => {
     setActiveTab(num);
     setMeetingCards({ id, num });
+  };
+  const handleEventTab = (event_id) => {
+    setCurrentEvent(event_id);
   };
 
   const tabContent = (tab) => {
@@ -31,16 +36,22 @@ function MeetingCard({
       default:
         break;
       case 0:
-        return <MeetingDescription meeting_id={id} num={num} />;
+        return (
+          <MeetingDescription
+            meeting_id={id}
+            num={num}
+            currentEvent={currentEvent}
+          />
+        );
       case 1:
-        return <CommentsList meeting_id={id} />;
+        return <CommentsList meeting_id={id} currentEvent={currentEvent} />;
       case 2:
-        return <EvalutionBlock meeting_id={id} />;
+        return <EvalutionBlock meeting_id={id} currentEvent={currentEvent} />;
     }
   };
   return (
     <div className="card">
-      <TabHeader tab={activeTab} handleTab={handleTab} id={id} />
+      <TabHeader tab={activeTab} handleCardTab={handleCardTab} id={id} />
       <Link
         className="title"
         style={{ color: "slateblue", float: "right" }}
@@ -50,8 +61,9 @@ function MeetingCard({
       </Link>
       <CardEventsTab
         meeting_id={id}
-        currentEvent={activeEvents[id]}
         num={num}
+        currentEvent={currentEvent}
+        handleEventTab={handleEventTab}
       />
       {tabContent(activeTab)}
     </div>

@@ -19,11 +19,11 @@ const meetingReducer = (state = INITIAL_STATE, action) => {
       let activeEvents = {};
 
       Ids.map((el, i) => {
-        if (arr[i].past_events) {
-          let lastEl = arr[i].past_events.length - 1;
+        if (arr[i].events) {
+          let lastEl = arr[i].events.length - 1;
           activeEvents = {
             ...activeEvents,
-            [el]: arr[i].past_events[lastEl],
+            [el]: arr[i].events[lastEl],
           };
         }
       });

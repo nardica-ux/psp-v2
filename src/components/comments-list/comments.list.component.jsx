@@ -1,61 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import "./comment-list.scss";
 import CommentItem from "./comment-item.component";
 import CommentItemAdd from "./comment-add.component";
-import CommentTab from "./comment-tab.component";
+import { deleteCommentStart } from "../../redux/comments/comments-actions";
 
 const CommentsList = ({
   meeting_id,
   commentsData,
-  activeEvents,
+  currentEvent,
+  deleteCommentStart,
 }) => {
-  const currentEvent = `${meeting_id}%%${activeEvents[meeting_id]}`;
-  const [dataComm, setData] = useState(commentsData[meeting_id] || null);
+  const [dataComm, setData] = useState(
+    commentsData[meeting_id] ? commentsData[meeting_id][currentEvent] : []
+  );
 
-  const handleDel = () => {
-    let update = [...commentsData[meeting_id]];
-    setData([...update]);
-  };
-
-  const handleSort = (num) => {
-    let data = [];
-    if (commentsData) data = commentsData[meeting_id][currentEvent];
-    switch (num) {
-      case 0:
-        {
-          let sorted1 = [...data];
-          setData([...sorted1.splice(0, 3)]);
-        }
-        break;
-      case 1:
-        {
-          let sorted2 = [...data];
-          sorted2.sort((a, b) => b.vote_count - a.vote_count);
-          setData([...sorted2.slice(0, 3)]);
-        }
-        break;
-      case 2:
-        setData([...data]);
-    }
-  };
+  useEffect(() => {
+    setData(commentsData[meeting_id][currentEvent]);
+  }, [currentEvent, commentsData]);
 
   return (
     <div>
-      {/* <CommentTab handleSort={handleSort} /> */}
-      {dataComm && dataComm[currentEvent]
-        ? dataComm[currentEvent].map((el, i) => (
+      {dataComm
+        ? dataComm.map((el) => (
             <CommentItem
+              key={el.comment_id}
               el={el}
-              id={el.comment_id}
-              meeting_id={meeting_id}
-              key={meeting_id + i}
-              handleDel={handleDel}
-              currentEvent={currentEvent}
+              comment_id={el.comment_id}
+              deleteCommentStart={deleteCommentStart}
             />
           ))
         : null}
-      <CommentItemAdd meeting_id={meeting_id} />
+      <CommentItemAdd meeting_id={meeting_id} event_id={currentEvent} />
     </div>
   );
 };
@@ -63,5 +39,10 @@ const mapStateToProps = (state) => ({
   commentsData: state.comments.commentsData,
   activeEvents: state.meetings.activeEvents,
 });
+const mapDispatchToProps = (dispatch) => {
+  return {
+    deleteCommentStart: (obj) => dispatch(deleteCommentStart(obj)),
+  };
+};
 
-export default connect(mapStateToProps)(CommentsList);
+export default connect(mapStateToProps, mapDispatchToProps)(CommentsList);

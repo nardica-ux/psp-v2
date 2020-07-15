@@ -2,6 +2,7 @@ import { commentsActionTypes } from "./comments-actions";
 const INITIAL_STATE = {
   commentsData: {},
   isFetching: false,
+  errMessage: null,
 };
 
 const commentsReducer = (state = INITIAL_STATE, action) => {
@@ -29,7 +30,7 @@ const commentsReducer = (state = INITIAL_STATE, action) => {
 
     case commentsActionTypes.ADD_COMMENT_REDUX_SUCCESS: {
       let el = action.payload;
-      if (state.commentsData[el.meeting_id])
+      if (!state.commentsData[el.meeting_id])
         state.commentsData[el.meeting_id] = {};
       if (!state.commentsData[el.meeting_id][el.event_id])
         state.commentsData[el.meeting_id][el.event_id] = [];
@@ -47,27 +48,55 @@ const commentsReducer = (state = INITIAL_STATE, action) => {
         },
       };
     }
-    case commentsActionTypes.DELETE_COMMENT_REDUX: {
-      const { id, meeting_id } = action.payload;
-      let arr = state.commentsData[meeting_id];
-      let el = arr.find((el) => el.comment_id === id);
-      let ind = arr.indexOf(el);
-      arr.splice(ind, 1);
+    case commentsActionTypes.DELETE_COMMENT_START:
       return {
         ...state,
-        commentsData: { ...state.commentsData, [meeting_id]: [...arr] },
+        isFetching: true,
+      };
+
+    case commentsActionTypes.DELETE_COMMENT_SUCCESS: {
+      const { id, meeting_id, event_id } = action.payload;
+      let updated = [...state.commentsData[meeting_id][event_id]];
+      let updatedArr = updated.filter((el) => el.comment_id !== id);
+      console.log(updatedArr);
+      return {
+        ...state,
+        isFetching: false,
+        commentsData: {
+          ...state.commentsData,
+          [meeting_id]: {
+            ...state.commentsData[meeting_id],
+            [event_id]: updatedArr,
+          },
+        },
       };
     }
-
-    case commentsActionTypes.VOTE_COMMENT_REDUX: {
-      const { vote, id, meeting_id } = action.payload;
-      let arr = state.commentsData[meeting_id];
-      let el = arr.find((el) => el.comment_id === id);
-      let ind = arr.indexOf(el);
-      arr[ind].vote_count = +vote;
+    case commentsActionTypes.DELETE_COMMENT_FAILURE:
       return {
         ...state,
-        commentsData: { ...state.commentsData, [meeting_id]: [...arr] },
+        isFetching: false,
+        errMessage: action.payload,
+      };
+    case commentsActionTypes.VOTE_COMMENT_SUCCESS:
+      return {
+        ...state,
+        isFetching: true,
+      };
+
+    case commentsActionTypes.VOTE_COMMENT_SUCCESS: {
+      const { comment_id, event_id, meeting_id } = action.payload;
+      let updated = [...state.commentsData[meeting_id][event_id]];
+      let index = null;
+      updated.find((el, i) => {
+        if (el.comment_id === comment_id) return (index = i);
+      });
+      updated.splice(index, 1, action.payload);
+      return {
+        ...state,
+        commentsData: {
+          ...state.commentsData,
+          [meeting_id]: updated,
+        },
       };
     }
     default:

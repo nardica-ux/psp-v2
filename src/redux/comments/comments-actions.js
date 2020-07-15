@@ -7,8 +7,14 @@ export const commentsActionTypes = {
   ADD_COMMENT_REDUX_SUCCESS: "ADD_COMMENT_REDUX_SUCCESS",
   ADD_COMMENT_REDUX_FAILURE: "ADD_COMMENT_REDUX_FAILURE",
 
-  DELETE_COMMENT_REDUX: "DELETE_COMMENT_REDUX",
+  DELETE_COMMENT_START: "DELETE_COMMENT_START",
+  DELETE_COMMENT_SUCCESS: "DELETE_COMMENT_SUCCESS",
+  DELETE_COMMENT_FAILURE: "DELETE_COMMENT_FAILURE",
   VOTE_COMMENT_REDUX: "VOTE_COMMENT_REDUX",
+
+  VOTE_COMMENT_START: "VOTE_COMMENT_START",
+  VOTE_COMMENT_SUCCESS: "VOTE_COMMENT_SUCCESS",
+  VOTE_COMMENT_FAILURE: "VOTE_COMMENT_FAILURE",
 };
 
 export const fetchCommentsSuccess = (arr) => ({
@@ -36,11 +42,27 @@ export const addNewCommentFailure = (el) => ({
   type: commentsActionTypes.ADD_COMMENT_REDUX_FAILURE,
   payload: el,
 });
-export const deleteCommentFromRedux = (obj) => ({
-  type: commentsActionTypes.DELETE_COMMENT_REDUX,
+export const deleteCommentStart = (obj) => ({
+  type: commentsActionTypes.DELETE_COMMENT_START,
   payload: obj,
 });
-export const voteCommentInRedux = (obj) => ({
-  type: commentsActionTypes.VOTE_COMMENT_REDUX,
+export const deleteCommentSuccess = (obj) => ({
+  type: commentsActionTypes.DELETE_COMMENT_SUCCESS,
   payload: obj,
+});
+export const deleteCommentFailure = (err) => ({
+  type: commentsActionTypes.DELETE_COMMENT_FAILURE,
+  payload: err,
+});
+export const voteCommentStart = (obj) => ({
+  type: commentsActionTypes.VOTE_COMMENT_START,
+  payload: obj,
+});
+export const voteCommentSuccess = (obj) => ({
+  type: commentsActionTypes.VOTE_COMMENT_SUCCESS,
+  payload: obj,
+});
+export const voteCommentFail = (err) => ({
+  type: commentsActionTypes.VOTE_COMMENT_FAILURE,
+  payload: err,
 });

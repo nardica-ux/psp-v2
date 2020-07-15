@@ -15,6 +15,8 @@ import { fetchMeetingsStart } from "../../redux/redux-meetings/meeting-actions";
 import { fetchCommentsStart } from "../../redux/comments/comments-actions";
 import { fetch_evaluations_start_async } from "../../redux/evaluations/evaluation-actions";
 import { check_user_session } from "../../redux/users/user-actions";
+import { fetchEventsOnMount } from "../../redux/events/event-actions";
+
 import { clearEvalsRedux } from "../../redux/evaluations/evaluation-actions";
 import { clearMeetingsRedux } from "../../redux/redux-meetings/meeting-actions";
 import { clear_redux_user } from "../../redux/users/user-actions";
@@ -28,33 +30,17 @@ class App extends Component {
       fetchMeetingsStart,
       fetchCommentsStart,
       check_user_session,
+      fetchEventsOnMount,
     } = this.props;
-    console.log("*** called component DID MOUNT");
     check_user_session();
     fetchMeetingsStart(); // works with saga
-    fetchCommentsStart(); //works with SAGA
+    fetchCommentsStart(); //works with saga
     fetch_evaluations_start_async(); //works with thunk
+    fetchEventsOnMount();
   }
 
-  // getSnapshotBeforeUpdate(prevProps, prevState) {
-  //   console.log("*** called get SnapShot before udate");
-  // }
-  // async shouldComponentUpdate(nextProps, nextState) {
-  //   if (nextProps === nextState) return false;
-  // }
-  // componentDidUpdate(prevProps, prevState, snapshot) {
-  //   console.log("*** called component_DID update", snapshot);
-  // }
   componentWillUnmount() {
-    // const {
-    //   clear_redux_user,
-    //   clearMeetingsRedux,
-    //   clearEvalsRedux,
-    // } = this.props;
-    // clearEvalsRedux();
-    // clearMeetingsRedux();
     this.unsubscribeFromAuth();
-    // clear_redux_user();
   }
 
   render() {
@@ -78,6 +64,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchMeetingsStart: () => dispatch(fetchMeetingsStart()),
     fetchCommentsStart: () => dispatch(fetchCommentsStart()),
+    fetchEventsOnMount: () => dispatch(fetchEventsOnMount()),
     fetch_evaluations_start_async: () =>
       dispatch(fetch_evaluations_start_async()),
 

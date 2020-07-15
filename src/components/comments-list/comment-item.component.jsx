@@ -1,43 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import "./comment-list.scss";
 import { connect } from "react-redux";
 
-import {
-  deleteCommentFromRedux,
-  voteCommentInRedux,
-} from "../../redux/comments/comments-actions";
-import {
-  deleteCommentFromFirebase,
-  voteMeetingComment,
-} from "../../firebase/firebase-comments";
+import { voteCommentStart } from "../../redux/comments/comments-actions";
 
 const CommentItem = ({
   el,
-  meeting_id,
-  id,
-  handleDel,
-  deleteCommentFromRedux,
-  voteCommentInRedux,
-  currentEvent,
+  comment_id,
+  deleteCommentStart,
+  voteCommentStart,
 }) => {
-  const [vote, setVotes] = useState(el.vote_count);
-  const handleDelComment = async (id) => {
-    let okDel = await deleteCommentFromFirebase(id);
-    if (okDel) {
-      deleteCommentFromRedux({ id, meeting_id });
-      handleDel();
-    }
-  };
-  const handleVote = async (num) => {
-    let upd = await voteMeetingComment(num, id);
-    if (upd) {
-      voteCommentInRedux({ vote, id, meeting_id });
-      setVotes(vote + num);
-    }
-  };
+  // const [vote, setVotes] = useState(el.vote_count);
+
   let nameInitials = "XYZ";
-  if (el.displayName) {
-    nameInitials = el.displayName.split(" ")[0];
+  if (el.user_name) {
+    let nameInit = el.user_name.split(" ");
+    nameInitials = nameInit.map((el) => el.split("")[0]);
     nameInitials = nameInitials.join("");
   }
 
@@ -45,21 +23,32 @@ const CommentItem = ({
     <div className="comment-item">
       <div className="comment-avatar">{nameInitials}</div>
 
-      <div key={id} className="comment-body">
+      <div key={comment_id} className="comment-body">
         <div style={{ float: "left" }}>
-          <div className="comment-vote">{vote || "0"}</div>
-          <div className="comment-vote" onClick={(e) => handleDelComment(id)}>
+          <div className="comment-vote">{el.vote_count || "0"}</div>
+          <div
+            className="comment-vote"
+            onClick={() => deleteCommentStart({ id: comment_id })}
+          >
             Del
           </div>
         </div>
-        <div className="comment-text">{el.body}</div>
+        <div className="comment-text">
+          {el.body} + evID :{el.comment_id} for commID: {el.event_id}
+        </div>
 
         <div>
-          <div className="comment-vote" onClick={() => handleVote(1)}>
+          <div
+            className="comment-vote"
+            onClick={() => voteCommentStart({ comment_id, vote: 1 })}
+          >
             +1
           </div>
 
-          <div className="comment-vote" onClick={() => handleVote(-1)}>
+          <div
+            className="comment-vote"
+            onClick={() => voteCommentStart({ comment_id, vote: -1 })}
+          >
             -1
           </div>
         </div>
@@ -67,11 +56,13 @@ const CommentItem = ({
     </div>
   );
 };
+const mapStateToProps = (state) => ({
+  // currentUser: state.users.currentUser,
+});
 const mapDispatchToProps = (dispatch) => {
   return {
-    deleteCommentFromRedux: (obj) => dispatch(deleteCommentFromRedux(obj)),
-    voteCommentInRedux: (obj) => dispatch(voteCommentInRedux(obj)),
+    voteCommentStart: (obj) => dispatch(voteCommentStart(obj)),
   };
 };
 
-export default connect(null, mapDispatchToProps)(CommentItem);
+export default connect(mapStateToProps, mapDispatchToProps)(CommentItem);

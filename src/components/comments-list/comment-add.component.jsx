@@ -8,7 +8,7 @@ function CommentItemAdd({
   addNewCommentStart,
   meeting_id,
   currentUser,
-  activeEvents,
+  event_id,
 }) {
   const [body, setValue] = useState("");
 
@@ -17,7 +17,6 @@ function CommentItemAdd({
   //   return}
   let user_name = currentUser.displayName;
   let user_id = currentUser.id;
-  let event_date = activeEvents[meeting_id];
 
   return (
     <form className="form-comment-add">
@@ -37,7 +36,7 @@ function CommentItemAdd({
             body,
             meeting_id,
             user_id,
-            event_date,
+            event_id,
             user_name,
           })
         }
@@ -49,7 +48,6 @@ function CommentItemAdd({
 }
 const mapStateToProps = (state) => ({
   currentUser: state.users.currentUser,
-  activeEvents: state.meetings.activeEvents,
 });
 const mapDispatchToProps = (dispatch) => {
   return {
