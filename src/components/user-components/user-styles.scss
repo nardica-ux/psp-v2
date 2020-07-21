@@ -71,7 +71,6 @@
   max-width: 1200px;
   min-width: 80%;
   margin: 8px auto;
-  // width: 100%;
 }
 fieldset {
   width: 70%;
@@ -79,4 +78,11 @@ fieldset {
   border-radius: 8px;
   margin-top: 32px;
   border: 1px solid slateblue;
+}
+.user-link-buttons {
+  color: slateblue;
+  margin: 5px;
+  &:hover {
+    text-decoration: underline;
+  }
 }

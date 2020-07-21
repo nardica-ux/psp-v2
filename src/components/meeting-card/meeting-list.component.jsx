@@ -9,7 +9,7 @@ const MeetingList = ({ meetings: { meetings, meetIds } }) => {
         ? meetings.map((el, i) => (
             <MeetingCard
               key={meetIds[i]}
-              num={i}
+              meeting_num={i}
               id={meetIds[i]}
               title={el.title}
             />

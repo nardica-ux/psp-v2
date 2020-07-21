@@ -13,7 +13,7 @@ const UserTopBlock = ({
   let thisName = initials.map((el) => el.split("")[0]);
   return (
     <>
-      <Link className="ava-user" to={"user/"}>
+      <Link className="ava-user" to={"/user"}>
         {initials ? thisName.join("") : null}
       </Link>
       <button className="secondary" onClick={() => logout_user_start({ id })}>

@@ -1,15 +1,44 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
-const CurrentEventSummary = ({ event_id, meeting_id, eventsData }) => {
+const CurrentEventSummary = ({
+  // event_id,
+  meeting_id,
+  eventsData,
+  activeEvents,
+}) => {
+  const [event_id, setId] = useState(activeEvents[meeting_id]);
+
+  useEffect(() => {
+    setId(activeEvents[meeting_id]);
+  }, [activeEvents]);
+
+  if (!eventsData) return null;
+
   const output = (data) => {
     if (data)
       return (
-        <div>
-          <p>
-            Register: {data.link || null} at {data.platform || null}
-          </p>
-          <p> Organizer: {data.org_name || null} </p>
+        <div style={{ width: "96%" }}>
+          <details>
+            <summary className="event-summary">
+              {data.topics.map((el, i) => (
+                <span className="event-details-topic" key={"topic-" + i}>
+                  {el}
+                </span>
+              ))}
+
+              <span
+                className="small-link"
+                onClick={() => console.log("register")}
+              >
+                Register >>
+              </span>
+            </summary>
+            <p>
+              Platform: {data.platform || null}
+              <br /> Contact person: {data.org_name || null}
+            </p>
+          </details>
         </div>
       );
   };
@@ -18,5 +47,6 @@ const CurrentEventSummary = ({ event_id, meeting_id, eventsData }) => {
 };
 const mapStateToProps = (state) => ({
   eventsData: state.events.eventsData,
+  activeEvents: state.meetings.activeEvents,
 });
 export default connect(mapStateToProps)(CurrentEventSummary);

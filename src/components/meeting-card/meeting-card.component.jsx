@@ -1,71 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import "./meeting-card.scss";
 
 import { setMeetingCards } from "../../redux/redux-meetings/meeting-actions";
 import "./meeting-card.scss";
-import MeetingDescription from "./meeting-descr.component";
-import CommentsList from "../comments-list/comments.list.component";
+
 import TabHeader from "./card-content-tab";
-import EvalutionBlock from "../evaluations-list/evaluations-list.component";
 import CardEventsTab from "../event-components/card-event-tab";
+import CardActiveContent from "./card-content.component";
 
 // ******************
 
-function MeetingCard({
-  id,
-  title,
-  setMeetingCards,
-  meetingCards,
-  num,
-  activeEvents,
-}) {
-  const [activeTab, setActiveTab] = useState(meetingCards[id]);
-  const [currentEvent, setCurrentEvent] = useState(activeEvents[id]);
-
-  const handleCardTab = (num) => {
-    setActiveTab(num);
-    setMeetingCards({ id, num });
-  };
-  const handleEventTab = (event_id) => {
-    setCurrentEvent(event_id);
-  };
-
-  const tabContent = (tab) => {
-    switch (tab) {
-      default:
-        break;
-      case 0:
-        return (
-          <MeetingDescription
-            meeting_id={id}
-            num={num}
-            currentEvent={currentEvent}
-          />
-        );
-      case 1:
-        return <CommentsList meeting_id={id} currentEvent={currentEvent} />;
-      case 2:
-        return <EvalutionBlock meeting_id={id} currentEvent={currentEvent} />;
-    }
-  };
+function MeetingCard({ id, title, meetingCards, meeting_num, activeEvents }) {
   return (
     <div className="card">
-      <TabHeader tab={activeTab} handleCardTab={handleCardTab} id={id} />
-      <Link
-        className="title"
-        style={{ color: "slateblue", float: "right" }}
-        to={`meeting/${id}`}
-      >
+      <Link className="title" to={`/meeting/${id}`}>
         {title}
       </Link>
-      <CardEventsTab
+      <TabHeader id={id} />
+
+      <CardEventsTab meeting_id={id} currentEvent={activeEvents[id]} />
+
+      <CardActiveContent
+        activeTab={meetingCards[id]}
         meeting_id={id}
-        num={num}
-        currentEvent={currentEvent}
-        handleEventTab={handleEventTab}
+        num={meetingCards[id]}
+        currentEvent={activeEvents[id]}
       />
-      {tabContent(activeTab)}
     </div>
   );
 }

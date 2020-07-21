@@ -9,12 +9,7 @@ const UserEditTable = () => {
 
   useEffect(async () => {
     let list = await getBase("users");
-    let updatedlist = list.map((el) => {
-      let id = Object.keys(el)[0];
-      let body = Object.values(el)[0];
-      return { ...body, id };
-    });
-    setUserList(updatedlist);
+    setUserList(list);
   }, []);
 
   return userList.length ? (
@@ -41,4 +36,4 @@ const mapStateToProps = (state) => ({
   currentUser: state.users.currentUser,
 });
 
-export default connect()(UserEditTable);
+export default connect(mapStateToProps)(UserEditTable);

@@ -38,18 +38,23 @@ const eventReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isPosting: true,
       };
+    case eventActionTypes.UPDATE_EVENTS_SUCCESS:
     case eventActionTypes.ADD_EVENT_SUCCESS: {
       let { meeting_id, event_id } = action.payload;
       return {
         ...state,
         eventsData: {
           ...state.eventsData,
-          [meeting_id]: { [event_id]: action.payload },
+          [meeting_id]: {
+            ...state.eventsData[meeting_id],
+            [event_id]: action.payload,
+          },
         },
         isPosting: false,
         errMessage: null,
       };
     }
+    case eventActionTypes.UPDATE_EVENTS_FAILURE:
     case eventActionTypes.ADD_EVENT_FAILURE:
       return {
         ...state,

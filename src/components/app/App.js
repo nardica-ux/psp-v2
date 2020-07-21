@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Link } from "react-router-dom";
+import "./App.scss";
 
 import "./App.scss";
 import AppHeader from "../app-header/app-header";
@@ -10,6 +11,9 @@ import MeetingPage from "../../pages/meeting-page";
 import UserPage from "../../pages/user-page";
 import UserEditTable from "../admin-tools/user-table";
 import EvalsEditTable from "../admin-tools/evaluations-edit-table";
+import MeetingsEditTable from "../admin-tools/meetings-edit-table";
+import EventsEditPage from "../../pages/events-table-page";
+import CommentsEditTable from "../admin-tools/comments-edit-table";
 
 import { fetchMeetingsStart } from "../../redux/redux-meetings/meeting-actions";
 import { fetchCommentsStart } from "../../redux/comments/comments-actions";
@@ -20,6 +24,7 @@ import { fetchEventsOnMount } from "../../redux/events/event-actions";
 import { clearEvalsRedux } from "../../redux/evaluations/evaluation-actions";
 import { clearMeetingsRedux } from "../../redux/redux-meetings/meeting-actions";
 import { clear_redux_user } from "../../redux/users/user-actions";
+import MeetPage from "./section";
 
 class App extends Component {
   unsubscribeFromAuth = null;
@@ -39,22 +44,41 @@ class App extends Component {
     fetchEventsOnMount();
   }
 
-  componentWillUnmount() {
-    this.unsubscribeFromAuth();
+  async componentWillUnmount() {
+    await this.unsubscribeFromAuth();
   }
 
   render() {
     return (
       <div className="App">
         <AppHeader />
-        <ControlREduxButtons />
+
         <Switch>
           <Route exact path="/" component={MainPage} />
           <Route path="/meeting/:meeting_id" component={MeetingPage} />
           <Route exact path="/user" component={UserPage} />
-          <Route path="/user/table" component={UserEditTable} />
+          <Route exact path="/user/table" component={UserEditTable} />
+          <Route path="/meetings/table" component={MeetingsEditTable} />
+          <Route path="/events/table" component={EventsEditPage} />
+          <Route path="/comments/table" component={CommentsEditTable} />
           <Route path="/evals/table" component={EvalsEditTable} />
+          <Route path="/meetings" component={MeetPage} />
         </Switch>
+
+        <div
+          style={{
+            position: "absolute",
+            height: 100,
+            width: "100%",
+            bottom: 0,
+            left: 0,
+            background: "darkgrey",
+            marginTop: 30,
+            padding: 20,
+          }}
+        >
+          <ControlREduxButtons />
+        </div>
       </div>
     );
   }

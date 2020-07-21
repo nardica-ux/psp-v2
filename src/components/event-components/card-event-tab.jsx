@@ -2,22 +2,27 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import "./card-event-tab.scss";
 import { pointEventToRedux } from "../../redux/redux-meetings/meeting-actions";
-import AddEvent from "./event-add.component";
-import CurrentEventSummary from "./event-summary-block";
+import "./card-event-tab.scss";
+import CurrentEventSummary from "../event-components/event-summary-block";
 
 const CardEventsTab = ({
   eventsData,
   meeting_id,
   currentEvent,
   pointEventToRedux,
-  handleEventTab,
 }) => {
-  const eventTabNames = (events) => {
+  const [open, setOpen] = useState(null);
+
+  const eventTabNames = () => {
     let tabs = [];
     let count = 0;
+    let events = eventsData[meeting_id];
 
     for (let key in events) {
       let el = events[key];
+      let event_date = el.date.date.split("-");
+      event_date = `${event_date[1]}-${event_date[2]} at ${el.date.time} ${el.date.ampm}`;
+      if (count !== 0) event_date = "| " + event_date;
 
       let nextEl = (
         <div
@@ -26,10 +31,19 @@ const CardEventsTab = ({
           key={meeting_id + "-event-" + count}
           onClick={() => {
             pointEventToRedux({ meeting_id, el: el.event_id });
-            handleEventTab(el.event_id);
           }}
         >
-          {el.date.date} at <br /> {el.date.time + el.date.ampm}
+          {open === el.event_id ? (
+            <span className="tab-icon" onClick={() => setOpen(null)}>
+              -
+            </span>
+          ) : (
+            <span className="tab-icon" onClick={() => setOpen(el.event_id)}>
+              +
+            </span>
+          )}
+
+          {event_date}
         </div>
       );
       count++;
@@ -39,19 +53,14 @@ const CardEventsTab = ({
   };
 
   return (
-    <form>
-      <fieldset className="tab-set">
-        <legend>last 3 events</legend>
+    <fieldset className="tab-set">
+      <legend>last 3 events</legend>
 
-        <div className="tab-container">
-          {eventsData ? eventTabNames(eventsData[meeting_id]) : null}
-        </div>
-
-        <CurrentEventSummary event_id={currentEvent} meeting_id={meeting_id} />
-
-        {/* <AddEvent meeting_id={meeting_id} event_id={currentEvent} /> */}
-      </fieldset>
-    </form>
+      <div className="tab-container">{eventsData ? eventTabNames() : null}</div>
+      {open ? (
+        <CurrentEventSummary meeting_id={meeting_id} event_id={open} />
+      ) : null}
+    </fieldset>
   );
 };
 const mapStateToProps = (state) => ({

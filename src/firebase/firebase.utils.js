@@ -97,6 +97,29 @@ export const createEventFire = async ({
   }
 };
 
+export const updateEventFire = async ({
+  topics,
+  date,
+  event_id,
+  participants,
+}) => {
+  try {
+    const eventRef = firestore.collection("events").doc(event_id);
+    const eventDoc = await eventRef.get();
+    const event = eventDoc.data();
+    if (topics && event.topics !== topics) {
+      await eventRef.update({ topics });
+    }
+    if (participants) {
+      await eventRef.update({ participants });
+    }
+    let updated = await eventRef.get();
+    return updated.data();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const updateMeetingFire = async (meeting) => {
   try {
     const { author, body, platform, goal, meeting_id, title, event } = meeting;

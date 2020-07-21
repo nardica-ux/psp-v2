@@ -1,9 +1,16 @@
 body {
   background: whitesmoke;
+  margin: 0;
+  padding: 0;
 }
 .App {
   text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  min-height: -webkit-fill-available;
+  position: relative;
 }
 .main-box {
   display: flex;
@@ -37,5 +44,28 @@ button {
   margin: 8;
   &:hover {
     background-color: slateblue;
+  }
+}
+.nav-link {
+  color: tomato;
+}
+.pop-up-container {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.6);
+  left: 0;
+  top: 0;
+  width: 100vw;
+  min-height: 100vh;
+  overflow: auto;
+  display: flex;
+
+  .pop-up {
+    position: relative;
+    background-color: white;
+    width: 80%;
+    margin-top: 10%;
+    min-height: 35vh;
+    padding: 12px;
+    border-radius: 22px;
   }
 }

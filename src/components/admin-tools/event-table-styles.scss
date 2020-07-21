@@ -1,0 +1,16 @@
+.event-table {
+  width: 96%;
+  background-color: white;
+  margin: auto;
+}
+.table-chip {
+  padding: 2px 8px;
+  background: whitesmoke;
+  border-radius: 8px;
+  margin: 4px;
+  font-size: 12px;
+  display: block;
+  &:hover {
+    background: rgb(198, 193, 232);
+  }
+}

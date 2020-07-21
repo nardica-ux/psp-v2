@@ -1,19 +1,29 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 
 import MeetingList from "../components/meeting-card/meeting-list.component";
 import AddMeetingForm from "../components/admin-tools/add_meeting-form";
 
-const MainPage = () => {
+const MainPage = ({ currentUser }) => {
   const [editing, setEditingMode] = useState(false);
 
   return (
     <>
-      <button onClick={() => setEditingMode(!editing)} className="main">
-        {editing ? "Close" : "Create Meeting"}
-      </button>
+      <h2> Active weekly meeting list </h2>
       {editing ? <AddMeetingForm /> : <MeetingList />}
+      {currentUser.type === "admin" ? (
+        <button
+          style={{ alignSelf: "flex-end" }}
+          onClick={() => setEditingMode(!editing)}
+          className="secondary"
+        >
+          {editing ? "Close" : "Create Meeting"}
+        </button>
+      ) : null}
     </>
   );
 };
-
-export default MainPage;
+const mapStateToProps = (state) => ({
+  currentUser: state.users.currentUser,
+});
+export default connect(mapStateToProps)(MainPage);
