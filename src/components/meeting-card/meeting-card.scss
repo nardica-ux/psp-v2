@@ -6,18 +6,60 @@
   background: white;
   min-width: 400px;
   flex: 0 1 45%;
+  .title-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    .meeting-pop-hint {
+      visibility: hidden;
+      position: absolute;
+      width: 50%;
+      min-height: 35px;
+      top: 50px;
+      left: 0;
+      box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+      background-color: whitesmoke;
+      z-index: 99;
+      border-radius: 12px;
+    }
+    .hint {
+      visibility: hidden;
+      background-color: whitesmoke;
+      border-radius: 30px;
+      height: 24px;
+      width: 24px;
+      border: 1px solid rgb(174, 165, 233);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: rgb(174, 165, 233);
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    &:hover .hint {
+      visibility: visible;
+      &:hover {
+        background-color: rgb(199, 193, 244);
+        color: slateblue;
+        & .meeting-pop-hint {
+          visibility: visible;
+        }
+      }
+    }
+  }
+
   .title {
     font-size: 20px;
     text-transform: uppercase;
     font-weight: 100;
     color: slateblue;
-    width: 100%;
-    margin: 12px auto;
-    display: block;
-    border: 1px solid transparent;
+    // border: 1px solid transparent;
     opacity: 0.8;
+    display: inline-block;
     &:hover {
-      border-bottom: 1px solid slateblue;
+      // border-bottom: 1px solid slateblue;
       transition: border 0.5s;
       opacity: 1;
     }

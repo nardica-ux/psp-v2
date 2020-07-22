@@ -20,7 +20,7 @@ const EventEditTable = ({ eventsData, meeting_id, meetings, num }) => {
           <h3>{meetings[num].title}</h3>
         </td>
         <td style={{ position: "relative" }}>
-          <AddEvent />
+          <AddEvent meeting_id={meeting_id} />
         </td>
       </tr>
       <tbody>{tableData(eventsData[meeting_id])}</tbody>

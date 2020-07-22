@@ -4,33 +4,28 @@ import { connect } from "react-redux";
 import MeetingEditForm from "./meeting-edit-form";
 
 function MeetingDescription({ meetings, meeting_id, num }) {
-  const { author, goal, body, platform } = meetings[num];
+  const data = meetings.find((el) => el.meeting_id === meeting_id);
+  const { author, goal, body, platform } = data;
   const [editMode, setEdit] = useState(false);
 
   const displayMode = () => (
-    <form>
-      <fieldset style={{ width: "96%" }}>
-        <legend>General info</legend>
-        <details>
-          <summary>{goal}</summary>
+    <div style={{ textAlign: "left" }}>
+      <p>
+        <strong>Goal: </strong>
+        {goal}
+      </p>
 
-          <p>
-            <p>Summary : {body}</p>
-            <span>
-              Author: <strong>{author} </strong>| Platform:
-              <strong>{platform}</strong>
-              <button
-                style={{ float: "right" }}
-                className="secondary"
-                onClick={() => setEdit(true)}
-              >
-                Edit
-              </button>
-            </span>
-          </p>
-        </details>
-      </fieldset>
-    </form>
+      <p>
+        <strong>Summary: </strong>
+        {body}
+      </p>
+      <p>
+        <span>
+          Author: <strong>{author} </strong>| Platform:
+          <strong>{platform}</strong>
+        </span>
+      </p>
+    </div>
   );
   return editMode ? (
     <MeetingEditForm

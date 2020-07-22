@@ -15,8 +15,12 @@ function CommentItemAdd({
   // if (value.lenth < 10 && value.split(" ").length < 4) {
   //   alert("please elaborate a bit more");
   //   return}
-  let user_name = currentUser.displayName;
-  let user_id = currentUser.id;
+  let user_id;
+  let user_name;
+  if (currentUser) {
+    user_name = currentUser.displayName;
+    user_id = currentUser.id;
+  }
 
   return (
     <form className="form-comment-add">

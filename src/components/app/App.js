@@ -44,8 +44,8 @@ class App extends Component {
     fetchEventsOnMount();
   }
 
-  async componentWillUnmount() {
-    await this.unsubscribeFromAuth();
+  componentWillUnmount() {
+    //  this.unsubscribeFromAuth();
   }
 
   render() {
@@ -65,18 +65,7 @@ class App extends Component {
           <Route path="/meetings" component={MeetPage} />
         </Switch>
 
-        <div
-          style={{
-            position: "absolute",
-            height: 100,
-            width: "100%",
-            bottom: 0,
-            left: 0,
-            background: "darkgrey",
-            marginTop: 30,
-            padding: 20,
-          }}
-        >
+        <div className="footer">
           <ControlREduxButtons />
         </div>
       </div>
