@@ -12,9 +12,16 @@ function CommentItemAdd({
 }) {
   const [body, setValue] = useState("");
 
-  // if (value.lenth < 10 && value.split(" ").length < 4) {
-  //   alert("please elaborate a bit more");
-  //   return}
+  const handleAdd = (obj) => {
+    const { body } = obj;
+    if (body.lenth < 10 && body.split(" ").length < 4) {
+      alert("please elaborate a bit more");
+      return;
+    }
+    addNewCommentStart(obj);
+    setValue("");
+  };
+
   let user_id;
   let user_name;
   if (currentUser) {
@@ -36,7 +43,7 @@ function CommentItemAdd({
         className="main"
         type="button"
         onClick={() =>
-          addNewCommentStart({
+          handleAdd({
             body,
             meeting_id,
             user_id,

@@ -3,25 +3,26 @@ import { connect } from "react-redux";
 import "./event-table-styles.scss";
 import { eventUpdateStart } from "../../redux/events/event-actions";
 
-export const EventTableRow = ({ data, eventUpdateStart }) => {
+export const EventTableRow = ({ data, eventUpdateStart, next }) => {
   const [editing, setEdit] = useState(false);
 
   const {
     org_name,
     org_email,
     link,
-    date,
     platform,
     topics,
     question,
     participants,
     event_id,
     meeting_id,
+    stamp,
   } = data;
 
   const [newName, setName] = useState(org_name);
   const [newEmail, setEmail] = useState(org_email);
   const [newLink, setLink] = useState(link);
+  const [newDate, setDate] = useState(stamp);
 
   const arrToObject = (arr) => {
     let dataNorm = {};
@@ -36,7 +37,7 @@ export const EventTableRow = ({ data, eventUpdateStart }) => {
     return filteredArr;
   };
 
-  const [newTopics, setTopics] = useState(arrToObject(topics));
+  const [newTopics, setTopics] = useState(arrToObject(topics) || []);
   const [additionalTopic, setAdditional] = useState("");
   const [thisParticipants, setParticipants] = useState(
     arrToObject(participants)
@@ -60,6 +61,7 @@ export const EventTableRow = ({ data, eventUpdateStart }) => {
 
     if (newEmail !== org_email) update.org_email = newEmail;
     if (newName !== org_name) update.org_name = newName;
+    if (newDate) update.date = newDate;
 
     eventUpdateStart(update);
     setAdditional("");
@@ -122,8 +124,19 @@ export const EventTableRow = ({ data, eventUpdateStart }) => {
           newLink
         )}
       </td>
-      <td>{date.date} </td>
-      <td>{date.time} </td>
+      <td style={next ? { backgroundColor: "wheat" } : null}>
+        {editing ? (
+          <input
+            value={newDate}
+            type="datetime-local"
+            onChange={(e) => setDate(e.target.value)}
+          />
+        ) : typeof newDate === "string" ? (
+          new Date(newDate).toLocaleString()
+        ) : (
+          new Date(newDate).toLocaleString()
+        )}
+      </td>
       <td>{platform} </td>
       <td>
         {topics.map((el, i) =>

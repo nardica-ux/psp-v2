@@ -65,15 +65,17 @@ export const updateCurrentUser = async (user) => {
 export const createEventFire = async ({
   meeting_id,
   user_id,
-  date,
+  stamp,
   link = "http://some-link",
   platform = "zoom",
   user_name,
   user_email,
+  topics,
 }) => {
   if (!user_id) return;
   const eventRef = firestore.collection("events").doc();
   const event_id = eventRef.id;
+
   try {
     await eventRef.set({
       event_id,
@@ -81,11 +83,11 @@ export const createEventFire = async ({
       org_id: user_id,
       createdAt: new Date(),
       platform,
-      date,
+      stamp,
       link,
       participants: [],
       question: [],
-      topics: [],
+      topics: topics || [],
       org_name: user_name,
       org_email: user_email,
     });
@@ -99,7 +101,7 @@ export const createEventFire = async ({
 
 export const updateEventFire = async ({
   topics,
-  date,
+  stamp,
   event_id,
   participants,
 }) => {
@@ -112,6 +114,10 @@ export const updateEventFire = async ({
     }
     if (participants) {
       await eventRef.update({ participants });
+    }
+    if (stamp) {
+      let stampDate = new Date(stamp);
+      await eventRef.update({ stamp: stampDate.toGMTString() });
     }
     let updated = await eventRef.get();
     return updated.data();

@@ -33,9 +33,7 @@ const CommentItem = ({
             Del
           </div>
         </div>
-        <div className="comment-text">
-          {el.body} + evID :{el.comment_id} for commID: {el.event_id}
-        </div>
+        <div className="comment-text">{el.body}</div>
 
         <div>
           <div

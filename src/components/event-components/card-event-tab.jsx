@@ -29,12 +29,12 @@ const CardEventsTab = ({
         className="event-link"
         onClick={() => setOpen(open === data.event_id ? null : data.event_id)}
       >
-        details >>
+        {open === data.event_id ? "close" : "details >>"}
       </p>
       <div
         className={data.event_id === currentEvent ? "active-event" : "link-tab"}
       >
-        {data.date.date} at {data.date.time}
+        {new Date(data.stamp).toLocaleString()}
       </div>
     </div>
   );
@@ -52,12 +52,19 @@ const CardEventsTab = ({
       ) : null}
       {open ? (
         <div className="event-brief">
-          <span onClick={() => setOpen(null)}>X {"  "}</span>
-          {eventsData[open].topics.map((question,i) => (
-            <p key={open+i}>{question}</p>
+          <h5 style={{ display: "inline-block" }}>
+            Questions for this meeting:{" "}
+          </h5>
+          <span className="event-link" onClick={() => setOpen(null)}>
+            X close
+          </span>
+          <br />
+          {eventsData[meeting_id][currentEvent].topics.map((question, i) => (
+            <span key={open + i}>{question} / </span>
           ))}
         </div>
       ) : null}
+
       <span className="event-link">see all meetings >></span>
     </div>
   );

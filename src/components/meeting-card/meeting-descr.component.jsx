@@ -3,8 +3,9 @@ import "./meeting-edit-form.scss";
 import { connect } from "react-redux";
 import MeetingEditForm from "./meeting-edit-form";
 
-function MeetingDescription({ meetings, meeting_id, num }) {
+function MeetingDescription({ meetings, meeting_id }) {
   const data = meetings.find((el) => el.meeting_id === meeting_id);
+
   const { author, goal, body, platform } = data;
   const [editMode, setEdit] = useState(false);
 
@@ -24,15 +25,18 @@ function MeetingDescription({ meetings, meeting_id, num }) {
           Author: <strong>{author} </strong>| Platform:
           <strong>{platform}</strong>
         </span>
+        <button
+          className="secondary"
+          onClick={() => setEdit(true)}
+          style={{ float: "right" }}
+        >
+          Edit
+        </button>
       </p>
     </div>
   );
   return editMode ? (
-    <MeetingEditForm
-      data={meetings[num]}
-      setEdit={setEdit}
-      meeting_id={meeting_id}
-    />
+    <MeetingEditForm data={data} setEdit={setEdit} meeting_id={meeting_id} />
   ) : (
     displayMode()
   );

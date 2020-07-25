@@ -20,7 +20,7 @@ const EvaluationSummary = ({ meeting_id, event_id, evaluationData }) => {
   const [showUnity, setShowUnity] = useState(true);
   const [showIntens, setShowIntens] = useState(true);
   const [showValue, setShowValue] = useState(true);
-
+  console.log(summary);
   if (!summary) return null;
   let newDiff = newLine(summary, "difficulty");
   let newUnity = newLine(summary, "unity");
